@@ -1,53 +1,62 @@
 package edu.Projects.TicketingSystem.Model;
 
-import edu.Projects.TicketingSystem.Repository.Interfaces.AccountDataHandler;
+import edu.Projects.TicketingSystem.Exceptions.DataSourceFailed;
+import edu.Projects.TicketingSystem.Model.DataHandlerInterfaces.AccountHandler;
 
-public class Account {
+import java.util.Objects;
+
+public sealed class Account permits Customer, EventOrganizer {
     private final int id;
     private String name;
     private String password;
     private String email;
     private String phone;
     private Double balance;
-    private Address address;
 
-    AccountDataHandler accountDataHandler;
+    AccountHandler accountDataHandler;
 
-    private Account(AccountDataHandler accountDataHandler, int id, String name, String password, String email, String phone, Double balance, Address address) {
+    protected Account(AccountHandler accountDataHandler, int id, String name, String password, String email, String phone, Double balance) {
+        Objects.requireNonNull(accountDataHandler);
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(password);
+        Objects.requireNonNull(email);
+        Objects.requireNonNull(phone);
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
         this.phone = phone;
         this.balance = balance;
-        this.address = address;
         this.accountDataHandler = accountDataHandler;
-
-        accountDataHandler.createAccount(this);
-    }
-
-    private Account(Account account) {
-        this.id = account.id;
-        this.name = account.name;
-        this.password = account.password;
-        this.email = account.email;
-        this.phone = account.phone;
-        this.balance = account.balance;
-        this.address = account.address;
-        this.accountDataHandler = account.accountDataHandler;
-    }
-
-    public static Account createAccount(AccountDataHandler accountDataHandler, int id, String name, String password, String email, String phone, Double balance, Address address) {
-        Account account = new Account(accountDataHandler, id, name, password, email, phone, balance, address);
-        if (accountDataHandler.createAccount(account)) {
-            return account;
-        } else {
-            return null;
+        if (!this.accountDataHandler.createAccount(this)) {
+            throw new DataSourceFailed("Account creation failed");
         }
     }
 
-    public static Account loadAccount(AccountDataHandler accountDataHandler, int id) {
-        return accountDataHandler.loadAccount(id);
+    protected Account(Account account) {
+        this(account.accountDataHandler, account.id, account.name, account.password, account.email, account.phone, account.balance);
+        Objects.requireNonNull(account);
+    }
+
+    protected Account(AccountHandler dataHandler, String email, String password) {
+        this(dataHandler.loadAccountByEmailAndPassword(email, password));
+        Objects.requireNonNull(dataHandler);
+        Objects.requireNonNull(email);
+        Objects.requireNonNull(password);
+    }
+
+//    protected static Account createAccount(AccountDataHandler accountDataHandler, int id, String name, String password, String email, String phone, Double balance) {
+//        Account account = new Account(accountDataHandler, id, name, password, email, phone, balance);
+//        if (accountDataHandler.createAccount(account)) {
+//            return account;
+//        } else {
+//            return null;
+//        }
+//    }
+
+
+    public static Account loadAccount(AccountHandler accountDataHandler, String email, String password) {
+        return accountDataHandler.loadAccountByEmailAndPassword(email, password);
     }
 
     public String getName() {
@@ -80,14 +89,6 @@ public class Account {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public Double getBalance() {

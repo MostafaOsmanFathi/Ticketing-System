@@ -1,13 +1,15 @@
-package edu.Projects.TicketingSystem.Repository.Interfaces;
+package edu.Projects.TicketingSystem.Model.DataHandlerInterfaces;
 
 import edu.Projects.TicketingSystem.Model.Account;
 
 import java.util.Objects;
 
 
-public interface AccountDataHandler {
+public interface AccountHandler {
 
-    Account loadAccount(int id);
+    Account loadAccountByEmailAndPassword(String email, String password);
+
+    Account loadAccountById(int id);
 
     boolean updateBalance(Account account);
 
