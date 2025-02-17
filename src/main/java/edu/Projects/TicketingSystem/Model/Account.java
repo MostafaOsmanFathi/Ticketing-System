@@ -1,7 +1,7 @@
 package edu.Projects.TicketingSystem.Model;
 
 import edu.Projects.TicketingSystem.Exceptions.DataSourceFailed;
-import edu.Projects.TicketingSystem.Model.DataHandlerInterfaces.AccountHandler;
+import edu.Projects.TicketingSystem.Model.DataHandlerInterfaces.DataHandler;
 
 import java.util.Objects;
 
@@ -13,9 +13,9 @@ public sealed class Account permits Customer, EventOrganizer {
     private String phone;
     private Double balance;
 
-    AccountHandler accountDataHandler;
+    DataHandler accountDataHandler;
 
-    protected Account(AccountHandler accountDataHandler, int id, String name, String password, String email, String phone, Double balance) {
+    protected Account(DataHandler accountDataHandler, int id, String name, String password, String email, String phone, Double balance) {
         Objects.requireNonNull(accountDataHandler);
         Objects.requireNonNull(name);
         Objects.requireNonNull(password);
@@ -38,7 +38,7 @@ public sealed class Account permits Customer, EventOrganizer {
         Objects.requireNonNull(account);
     }
 
-    protected Account(AccountHandler dataHandler, String email, String password) {
+    protected Account(DataHandler dataHandler, String email, String password) {
         this(dataHandler.loadAccountByEmailAndPassword(email, password));
         Objects.requireNonNull(dataHandler);
         Objects.requireNonNull(email);
@@ -55,7 +55,7 @@ public sealed class Account permits Customer, EventOrganizer {
 //    }
 
 
-    public static Account loadAccount(AccountHandler accountDataHandler, String email, String password) {
+    public static Account loadAccount(DataHandler accountDataHandler, String email, String password) {
         return accountDataHandler.loadAccountByEmailAndPassword(email, password);
     }
 

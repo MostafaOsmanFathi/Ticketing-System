@@ -1,20 +1,44 @@
 package edu.Projects.TicketingSystem.Model.EventComponents;
 
-public class Ticket extends TicketInfo {
-    int count;
+import edu.Projects.TicketingSystem.Model.DataHandlerInterfaces.DataHandler;
 
-    Ticket(int ticketID, int eventID, String ticketName, String ticketType) {
-        super(ticketID, eventID, ticketName, ticketType);
+import java.time.LocalDate;
+
+public class Ticket extends TicketInfo {
+    final boolean isTicketRefundable;
+    final double refundRate;
+    int numberOfTickets;
+
+    Ticket(DataHandler dataHandler, int ticketID, int eventID, double ticketPrice, String ticketName, String ticketType, LocalDate date, boolean isTicketRefundable, int count, double refundRate) {
+        super(dataHandler, ticketID, eventID, ticketPrice, ticketName, ticketType, date);
+        this.numberOfTickets = count;
+        this.isTicketRefundable = isTicketRefundable;
+        this.refundRate = refundRate;
     }
-    int getCount() {
-        return count;
+
+    public boolean isTicketRefundable() {
+        return isTicketRefundable;
     }
+
+    public double getRefundRate() {
+        return refundRate;
+    }
+
+    public double getRefundCost() {
+        return refundRate * ticketPrice;
+    }
+
+    int getNumberOfTickets() {
+        return numberOfTickets;
+    }
+
     boolean increaseCount() {
-        count++;
+        numberOfTickets++;
         return true;
     }
+
     boolean decreaseCount() {
-        count--;
+        numberOfTickets--;
         return true;
     }
 }

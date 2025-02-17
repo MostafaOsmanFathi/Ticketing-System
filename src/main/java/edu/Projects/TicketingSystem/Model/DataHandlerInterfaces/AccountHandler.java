@@ -5,7 +5,7 @@ import edu.Projects.TicketingSystem.Model.Account;
 import java.util.Objects;
 
 
-public interface AccountHandler {
+interface AccountHandler {
 
     Account loadAccountByEmailAndPassword(String email, String password);
 
