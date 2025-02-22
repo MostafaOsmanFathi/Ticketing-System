@@ -1,6 +1,5 @@
 package edu.Projects.TicketingSystem.Model.EventComponents;
 
-import edu.Projects.TicketingSystem.Model.DataHandlerInterfaces.DataHandler;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -14,9 +13,8 @@ public class TicketInfo {
     final String ticketType;
     final LocalDate expirationDate;
 
-    DataHandler dataHandler;
 
-    TicketInfo(DataHandler dataHandler, int ticketID, int eventID,double ticketPrice ,String ticketName, String ticketType, LocalDate expirationDate) {
+    TicketInfo(int ticketID, int eventID,double ticketPrice ,String ticketName, String ticketType, LocalDate expirationDate) {
         this.ticketID = ticketID;
         this.eventID = eventID;
         this.ticketPrice = ticketPrice;
@@ -40,5 +38,29 @@ public class TicketInfo {
     public boolean isValidForNow() {
         LocalDate now = LocalDate.now();
         return now.isBefore(expirationDate);
+    }
+
+    public int getTicketID() {
+        return ticketID;
+    }
+
+    public int getEventID() {
+        return eventID;
+    }
+
+    public double getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public String getTicketName() {
+        return ticketName;
+    }
+
+    public String getTicketType() {
+        return ticketType;
+    }
+
+    public LocalDate getExpirationDate() {
+        return expirationDate;
     }
 }

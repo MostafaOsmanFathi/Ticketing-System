@@ -1,6 +1,6 @@
 package edu.Projects.TicketingSystem.Model.EventComponents;
 
-import edu.Projects.TicketingSystem.Model.DataHandlerInterfaces.DataHandler;
+import edu.Projects.TicketingSystem.Model.Customer;
 
 import java.time.LocalDate;
 
@@ -9,8 +9,8 @@ public class Ticket extends TicketInfo {
     final double refundRate;
     int numberOfTickets;
 
-    Ticket(DataHandler dataHandler, int ticketID, int eventID, double ticketPrice, String ticketName, String ticketType, LocalDate date, boolean isTicketRefundable, int count, double refundRate) {
-        super(dataHandler, ticketID, eventID, ticketPrice, ticketName, ticketType, date);
+    public Ticket(int ticketID, int eventID, double ticketPrice, String ticketName, String ticketType, LocalDate date, boolean isTicketRefundable, int count, double refundRate) {
+        super(ticketID, eventID, ticketPrice, ticketName, ticketType, date);
         this.numberOfTickets = count;
         this.isTicketRefundable = isTicketRefundable;
         this.refundRate = refundRate;
@@ -40,5 +40,13 @@ public class Ticket extends TicketInfo {
     boolean decreaseCount() {
         numberOfTickets--;
         return true;
+    }
+
+    public CustomerTicket createCustomerTicket(Customer customer) {
+        if (numberOfTickets == 0) {
+            return null;
+        }
+        decreaseCount();
+        return new CustomerTicket(customer.getId(), this);
     }
 }

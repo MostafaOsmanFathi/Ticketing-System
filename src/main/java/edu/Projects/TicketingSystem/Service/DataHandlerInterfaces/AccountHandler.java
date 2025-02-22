@@ -1,13 +1,15 @@
-package edu.Projects.TicketingSystem.Model.DataHandlerInterfaces;
+package edu.Projects.TicketingSystem.Service.DataHandlerInterfaces;
 
 import edu.Projects.TicketingSystem.Model.Account;
+import edu.Projects.TicketingSystem.Model.Customer;
+import edu.Projects.TicketingSystem.Model.EventComponents.Event;
 
 import java.util.Objects;
 
 
 interface AccountHandler {
 
-    Account loadAccountByEmailAndPassword(String email, String password);
+    Account loadAccountByEmail(String email);
 
     Account loadAccountById(int id);
 
@@ -17,7 +19,7 @@ interface AccountHandler {
 
     boolean createAccount(Account account);
 
-    default boolean deposit(Account account, int amount) {
+    default boolean deposit(Account account, double amount) {
         Objects.requireNonNull(account);
         if (amount <= 0) {
             return false;
@@ -29,7 +31,7 @@ interface AccountHandler {
         } else return false;
     }
 
-    default boolean withdraw(Account account, int amount) {
+    default boolean withdraw(Account account, double amount) {
         Objects.requireNonNull(account);
         if (amount <= 0 || account.getBalance() < amount) {
             return false;
@@ -41,4 +43,14 @@ interface AccountHandler {
             return false;
         } else return true;
     }
+
+    boolean addCustomer(Customer customer);
+
+    boolean checkCustomer(String email);
+
+    boolean addEventOrganizer(Customer customer);
+
+    boolean checkEventOrganizer(String email);
+    boolean regiseterCustomer(String name, String password, String email, String phoneNumber, Double balance);
+    boolean regiseterEventOrganizer(String name, String password, String email, String phoneNumber, Double balance);
 }

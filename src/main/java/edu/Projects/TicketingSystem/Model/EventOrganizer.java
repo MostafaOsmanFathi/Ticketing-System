@@ -1,7 +1,7 @@
 package edu.Projects.TicketingSystem.Model;
 
-import edu.Projects.TicketingSystem.Model.DataHandlerInterfaces.DataHandler;
 import edu.Projects.TicketingSystem.Model.EventComponents.Event;
+import edu.Projects.TicketingSystem.Model.EventComponents.Ticket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,26 +9,34 @@ import java.util.List;
 public final class EventOrganizer extends Account {
     private final List<Event> events;
 
-    private EventOrganizer(DataHandler accountDataHandler, int id, String name, String password, String email, String phone, Double balance) {
-        super(accountDataHandler, id, name, password, email, phone, balance);
+    public EventOrganizer(int id, String name, String password, String email, String phone, Double balance) {
+        super(id, name, password, email, phone, balance);
         events = new ArrayList<Event>();
     }
 
-    //TODO compelte getEvents
+    public EventOrganizer(Account account) {
+        super(account);
+        events = new ArrayList<Event>();
+
+    }
+
     public List<Event> getEvents() {
         return events;
     }
 
-    //TODO  createEvent
     public boolean createEvent(int eventID, String eventName, String eventType, String eventDescription) {
-//        Event event = new Event(accountDataHandler, eventID, eventName, eventType, eventDescription);
-
+        Event event = new Event(eventID, eventName, eventType, eventDescription);
+        events.add(event);
         return false;
     }
 
-    //TODO public boolean deleteEvent(Event event) {
     public boolean deleteEvent(Event event) {
-        return false;
+        int index = events.indexOf(event);
+        if (index != -1) {
+            events.remove(index);
+            return true;
+        } else
+            return false;
     }
 
     int getIdxByEventId(int eventID) {
@@ -40,8 +48,13 @@ public final class EventOrganizer extends Account {
         return -1;
     }
 
-    //TODO public boolean addTicketForEvent(int eventId) {
-    public boolean addTicketForEvent(int eventId) {
+
+    public boolean addTicketForEvent(int eventId, Ticket ticket) {
+        int idx = getIdxByEventId(eventId);
+        if (idx != -1) {
+            Event event = events.get(idx);
+            event.addTicket(ticket);
+        }
         return false;
     }
 

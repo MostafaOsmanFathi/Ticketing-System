@@ -1,7 +1,6 @@
 package edu.Projects.TicketingSystem.Model;
 
 import edu.Projects.TicketingSystem.Exceptions.DataSourceFailed;
-import edu.Projects.TicketingSystem.Model.DataHandlerInterfaces.DataHandler;
 
 import java.util.Objects;
 
@@ -13,10 +12,8 @@ public sealed class Account permits Customer, EventOrganizer {
     private String phone;
     private Double balance;
 
-    DataHandler accountDataHandler;
 
-    protected Account(DataHandler accountDataHandler, int id, String name, String password, String email, String phone, Double balance) {
-        Objects.requireNonNull(accountDataHandler);
+    protected Account(int id, String name, String password, String email, String phone, Double balance) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(password);
         Objects.requireNonNull(email);
@@ -27,36 +24,11 @@ public sealed class Account permits Customer, EventOrganizer {
         this.email = email;
         this.phone = phone;
         this.balance = balance;
-        this.accountDataHandler = accountDataHandler;
-        if (!this.accountDataHandler.createAccount(this)) {
-            throw new DataSourceFailed("Account creation failed");
-        }
     }
 
     protected Account(Account account) {
-        this(account.accountDataHandler, account.id, account.name, account.password, account.email, account.phone, account.balance);
+        this(account.id, account.name, account.password, account.email, account.phone, account.balance);
         Objects.requireNonNull(account);
-    }
-
-    protected Account(DataHandler dataHandler, String email, String password) {
-        this(dataHandler.loadAccountByEmailAndPassword(email, password));
-        Objects.requireNonNull(dataHandler);
-        Objects.requireNonNull(email);
-        Objects.requireNonNull(password);
-    }
-
-//    protected static Account createAccount(AccountDataHandler accountDataHandler, int id, String name, String password, String email, String phone, Double balance) {
-//        Account account = new Account(accountDataHandler, id, name, password, email, phone, balance);
-//        if (accountDataHandler.createAccount(account)) {
-//            return account;
-//        } else {
-//            return null;
-//        }
-//    }
-
-
-    public static Account loadAccount(DataHandler accountDataHandler, String email, String password) {
-        return accountDataHandler.loadAccountByEmailAndPassword(email, password);
     }
 
     public String getName() {
@@ -97,10 +69,27 @@ public sealed class Account permits Customer, EventOrganizer {
 
     public void setBalance(Double balance) {
         this.balance = balance;
-        accountDataHandler.updateBalance(this);
     }
 
     public int getId() {
         return id;
     }
+
+
+    public boolean withdraw(double amount) {
+        if (amount <= 0 || amount > balance) {
+            return false;
+        }
+        this.balance -= amount;
+        return true;
+    }
+
+    public boolean deposit(double amount) {
+        if (amount <= 0) {
+            return false;
+        }
+        this.balance += amount;
+        return true;
+    }
+
 }

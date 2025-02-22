@@ -1,6 +1,5 @@
 package edu.Projects.TicketingSystem.Model.EventComponents;
 
-import edu.Projects.TicketingSystem.Model.DataHandlerInterfaces.DataHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,19 +13,17 @@ public class Event {
     String eventDescription;
     List<Ticket> tickets;
 
-    DataHandler dataHandler;
 
-    public Event(DataHandler dataHandler, int eventID, String eventName, String eventType, String eventDescription) {
+    public Event(int eventID, String eventName, String eventType, String eventDescription) {
         this.eventID = eventID;
         this.eventName = eventName;
         this.eventType = eventType;
         this.eventDescription = eventDescription;
         this.tickets = new ArrayList<>();
-        this.dataHandler = dataHandler;
         this.numberOfConfirmedTickets = 0;
     }
 
-    boolean addTicket(Ticket ticket) {
+    public boolean addTicket(Ticket ticket) {
         return this.tickets.add(ticket);
     }
 
@@ -58,8 +55,21 @@ public class Event {
         return eventDescription;
     }
 
-    //TODO confirmTicket(Ticket ticket)
-    public boolean confirmTicket(Ticket ticket) {
+    public boolean confirmTicket(CustomerTicket ticket) {
+        if (ticket.confirmTicket()) {
+            this.numberOfConfirmedTickets++;
+        }
         return false;
     }
+
+    public Ticket getTicketByTicketId(int ticketID) {
+
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketID() == ticketID) {
+                return ticket;
+            }
+        }
+        return null;
+    }
+
 }
