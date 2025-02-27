@@ -36,14 +36,14 @@ class TicketTest {
     @Test
     void testIncreaseCount() {
         Ticket ticket = new Ticket(1, 100, 50.0, "VIP", "Premium", LocalDate.of(2025, 12, 31), true, 5, 0.8);
-        assertTrue(ticket.increaseCount());
+        assertTrue(ticket.increaseNumberOfTickets());
         assertEquals(6, ticket.getNumberOfTickets());
     }
 
     @Test
     void testDecreaseCount() {
         Ticket ticket = new Ticket(1, 100, 50.0, "VIP", "Premium", LocalDate.of(2025, 12, 31), true, 5, 0.8);
-        assertTrue(ticket.decreaseCount());
+        assertTrue(ticket.decreaseNumberOfTickets());
         assertEquals(4, ticket.getNumberOfTickets());
     }
 
