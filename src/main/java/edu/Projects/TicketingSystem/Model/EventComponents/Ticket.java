@@ -32,12 +32,12 @@ public class Ticket extends TicketInfo {
         return numberOfTickets;
     }
 
-    boolean increaseCount() {
+    boolean increaseNumberOfTickets() {
         numberOfTickets++;
         return true;
     }
 
-    boolean decreaseCount() {
+    boolean decreaseNumberOfTickets() {
         numberOfTickets--;
         return true;
     }
@@ -46,7 +46,7 @@ public class Ticket extends TicketInfo {
         if (numberOfTickets == 0) {
             return null;
         }
-        decreaseCount();
+        decreaseNumberOfTickets();
         return new CustomerTicket(customer.getId(), this);
     }
 }

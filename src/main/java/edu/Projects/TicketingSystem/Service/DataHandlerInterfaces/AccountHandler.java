@@ -2,7 +2,6 @@ package edu.Projects.TicketingSystem.Service.DataHandlerInterfaces;
 
 import edu.Projects.TicketingSystem.Model.Account;
 import edu.Projects.TicketingSystem.Model.Customer;
-import edu.Projects.TicketingSystem.Model.EventComponents.Event;
 
 import java.util.Objects;
 
@@ -46,11 +45,11 @@ interface AccountHandler {
 
     boolean addCustomer(Customer customer);
 
-    boolean checkCustomer(String email);
+    boolean checkIsCustomer(String email);
 
     boolean addEventOrganizer(Customer customer);
 
-    boolean checkEventOrganizer(String email);
+    boolean checkIsEventOrganizer(String email);
     boolean regiseterCustomer(String name, String password, String email, String phoneNumber, Double balance);
     boolean regiseterEventOrganizer(String name, String password, String email, String phoneNumber, Double balance);
 }

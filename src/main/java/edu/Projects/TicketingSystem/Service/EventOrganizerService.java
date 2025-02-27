@@ -1,7 +1,12 @@
 package edu.Projects.TicketingSystem.Service;
 
+import edu.Projects.TicketingSystem.Model.EventComponents.Event;
 import edu.Projects.TicketingSystem.Model.EventComponents.Ticket;
+import edu.Projects.TicketingSystem.Model.EventOrganizer;
 import edu.Projects.TicketingSystem.Service.DataHandlerInterfaces.DataHandler;
+
+import javax.xml.crypto.Data;
+import java.util.List;
 
 public class EventOrganizerService {
 
@@ -19,14 +24,24 @@ public class EventOrganizerService {
         return eventOrganizerService;
     }
 
-    //TODO createEvent
-    public boolean createEvent() {
+    public boolean createEvent(EventOrganizer eventOrganizer, Event event) {
+        if (dataHandler.addEvent(eventOrganizer, event)) {
+            eventOrganizer.createEvent(event);
+            return true;
+        }
         return false;
     }
 
-    //TODO add Ticket
-    public boolean addTicket() {
+    public boolean addTicket(Event event, Ticket ticket) {
+        if (dataHandler.addTicketToEvent(event, ticket)) {
+            event.addTicket(ticket);
+            return true;
+        }
         return false;
+    }
+
+    public List<Ticket> getAllAvlibleTickets() {
+        return dataHandler.getAllAvailableTickets();
     }
 
 }

@@ -30,6 +30,10 @@ public final class EventOrganizer extends Account {
         return false;
     }
 
+    public boolean createEvent(Event event) {
+        return createEvent(event.getEventID(), event.getEventName(), event.getEventType(), event.getEventDescription());
+    }
+
     public boolean deleteEvent(Event event) {
         int index = events.indexOf(event);
         if (index != -1) {

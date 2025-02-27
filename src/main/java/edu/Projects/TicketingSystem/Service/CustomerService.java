@@ -1,8 +1,11 @@
 package edu.Projects.TicketingSystem.Service;
 
+import edu.Projects.TicketingSystem.Model.Customer;
+import edu.Projects.TicketingSystem.Model.EventComponents.CustomerTicket;
 import edu.Projects.TicketingSystem.Model.EventComponents.Ticket;
 import edu.Projects.TicketingSystem.Service.DataHandlerInterfaces.DataHandler;
 
+import javax.xml.crypto.Data;
 import java.util.List;
 
 public class CustomerService {
@@ -21,14 +24,13 @@ public class CustomerService {
         return customerService;
     }
 
-    public List<Ticket> getAllAvlibleTickets() {
-        //TODO Show All Tickets
-        return null;
-    }
-
-    public boolean buyTicket(Ticket ticket) {
-        //TODO buy Ticket
-        return false;
+    public boolean buyTicket(Customer customer, Ticket ticket) {
+        CustomerTicket newCustomerTicket = dataHandler.BuyTicket(customer, ticket);
+        if (newCustomerTicket == null) {
+            return false;
+        }
+        customer.buyTicket(newCustomerTicket);
+        return true;
     }
 
     public boolean refundTicket(Ticket ticket) {

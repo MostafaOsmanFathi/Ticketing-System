@@ -19,10 +19,10 @@ public class AccountService {
     }
 
 
-    Customer loginCustomerAccount(String email, String password) {
+    public Customer loginCustomerAccount(String email, String password) {
         Account account = GetAccount(email);
         if (account.getPassword().equals(password)) {
-            if (dataHandler.checkCustomer(email)) {
+            if (dataHandler.checkIsCustomer(email)) {
                 return new Customer(account);
             }
             return null;
@@ -31,10 +31,10 @@ public class AccountService {
 
     }
 
-    EventOrganizer loginEventOrganizer(String email, String password) {
+    public EventOrganizer loginEventOrganizer(String email, String password) {
         Account account = GetAccount(email);
         if (account.getPassword().equals(password)) {
-            if (dataHandler.checkCustomer(email)) {
+            if (dataHandler.checkIsEventOrganizer(email)) {
                 return new EventOrganizer(account);
             }
             return null;
@@ -42,7 +42,7 @@ public class AccountService {
         return null;
     }
 
-    boolean registerCustomerAccount(String name, String password, String email, String phoneNumber, Double balance) {
+    public boolean registerCustomerAccount(String name, String password, String email, String phoneNumber, Double balance) {
         Account account = GetAccount(email);
         if (account != null) {
             return false;
@@ -50,7 +50,7 @@ public class AccountService {
         return dataHandler.regiseterCustomer(name, password, email, phoneNumber, balance);
     }
 
-    boolean registerEventOrganizerAccount(String name, String password, String email, String phoneNumber, Double balance) {
+    public boolean registerEventOrganizerAccount(String name, String password, String email, String phoneNumber, Double balance) {
         Account account = GetAccount(email);
         if (account != null) {
             return false;
