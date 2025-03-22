@@ -5,7 +5,7 @@ import com.ticketing.model.Account;
 public interface AccountRepository {
     boolean createAccount(Account account, String accountType);
 
-    boolean getAccount(String email, String password);
+    Account getAccount(String email, String password);
 
     boolean deposit(Account account, double amount);
 

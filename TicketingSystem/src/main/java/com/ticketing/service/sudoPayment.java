@@ -1,4 +1,4 @@
-package com.ticketing.model;
+package com.ticketing.service;
 
 public class sudoPayment implements PaymentInterface {
 

@@ -1,4 +1,4 @@
-package com.ticketing.model;
+package com.ticketing.service;
 
 public interface PaymentInterface {
 
