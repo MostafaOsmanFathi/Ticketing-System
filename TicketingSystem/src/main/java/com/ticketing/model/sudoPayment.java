@@ -3,12 +3,12 @@ package com.ticketing.model;
 public class sudoPayment implements PaymentInterface {
 
     @Override
-    public boolean pay(int amount) {
+    public boolean pay(double amount) {
         return true;
     }
 
     @Override
-    public boolean collect(int amount) {
+    public boolean collect(double amount) {
         return true;
     }
 }

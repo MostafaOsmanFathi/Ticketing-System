@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Account {
+    private final int accountId;
     private String userName;
     private String email;
     private String password;
@@ -12,7 +13,8 @@ public class Account {
     private int defaultPaymentIdx = 0;
     private final List<PaymentInterface> payments;
 
-    public Account(String name, String email, String password) {
+    public Account(int accountId, String name, String email, String password) {
+        this.accountId = accountId;
         this.userName = name;
         this.email = email;
         this.password = password;
@@ -23,7 +25,7 @@ public class Account {
 
     public boolean deposit(int amount, int paymentIdx) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("amount must be greater than 0");
+            throw new IllegalStateException("amount must be greater than 0");
         } else if (payments.isEmpty()) {
             throw new IllegalStateException("No payment available");
         } else if (paymentIdx >= payments.size() || paymentIdx < 0) {
@@ -38,7 +40,7 @@ public class Account {
         return true;
     }
 
-    public boolean withdraw(int amount, int paymentIdx) {
+    public boolean withdraw(double amount, int paymentIdx) {
         if (amount <= 0) {
             throw new IllegalArgumentException("amount must be greater than 0");
         } else if (payments.isEmpty()) {
@@ -67,7 +69,7 @@ public class Account {
         return deposit(amount, defaultPaymentIdx);
     }
 
-    public boolean withdraw(int amount) {
+    public boolean withdraw(double amount) {
         return withdraw(amount, defaultPaymentIdx);
     }
 
@@ -95,4 +97,11 @@ public class Account {
         this.email = email;
     }
 
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public double getWalletBalance() {
+        return walletBalance;
+    }
 }
