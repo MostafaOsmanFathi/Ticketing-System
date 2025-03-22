@@ -16,6 +16,16 @@ public class Event {
         this.ticketTypes = new ArrayList<>();
     }
 
+    public boolean addTicketType(TicketType ticketType) {
+        return ticketTypes.add(ticketType);
+    }
+
+    public TicketType getTicketTypes(int ticketTypeId) {
+        if (ticketTypeId < 0 || ticketTypeId >= ticketTypes.size()) {
+            throw new IndexOutOfBoundsException();
+        }
+        return ticketTypes.get(ticketTypeId);
+    }
 
     public String getEventName() {
         return eventName;
