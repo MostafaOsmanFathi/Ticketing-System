@@ -11,13 +11,8 @@ public class Customer extends Account {
         this.customerTickets = new ArrayList<CustomerTicket>();
     }
 
-    public boolean buyTicket(TicketType ticketType) {
-        if (this.withdraw(ticketType.getTicketPrice())) {
-            CustomerTicket newTicket = ticketType.generateCustomerTicket(getAccountId());
-            customerTickets.add(newTicket);
-            return true;
-        }
-        return false;
+    public boolean addCustomerTicket(CustomerTicket customerTicket) {
+        return customerTickets.add(customerTicket);
     }
 
 }

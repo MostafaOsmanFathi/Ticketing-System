@@ -7,6 +7,7 @@ import java.time.LocalDate;
 public class TicketType {
     private final int eventId;
     private final int ticketTypeId;
+    private final int eventOrgnizerId;
     private final IdGenerator idGenerator;
     private double ticketPrice;
     private int numberOfTickets;
@@ -14,7 +15,7 @@ public class TicketType {
     private String ticketName;
 
 
-    public TicketType(int eventId, int ticketTypeId, double ticketPrice, int numberOfTickets, String ticketType, String ticketName) {
+    public TicketType(int eventId, int eventOrgnizerId, int ticketTypeId, double ticketPrice, int numberOfTickets, String ticketType, String ticketName) {
         this.eventId = eventId;
         this.ticketTypeId = ticketTypeId;
         this.ticketPrice = ticketPrice;
@@ -22,6 +23,7 @@ public class TicketType {
         this.ticketType = ticketType;
         this.ticketName = ticketName;
         this.idGenerator = new IdGenerator();
+        this.eventOrgnizerId = eventOrgnizerId;
     }
 
     public CustomerTicket generateCustomerTicket(int customerId) {
@@ -32,6 +34,9 @@ public class TicketType {
         return new CustomerTicket(idGenerator.getTicketId(), customerId, eventId);
     }
 
+    public int getEventOrgnizerId() {
+        return eventOrgnizerId;
+    }
 
     public boolean increaseNumberOfTicket() {
         numberOfTickets++;
@@ -54,7 +59,6 @@ public class TicketType {
     public String getTicketName() {
         return ticketName;
     }
-
 
 
     public int getTicketTypeId() {

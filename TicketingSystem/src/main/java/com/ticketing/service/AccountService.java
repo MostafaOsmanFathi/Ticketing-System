@@ -3,7 +3,6 @@ package com.ticketing.service;
 import com.ticketing.model.Account;
 import com.ticketing.repository.AccountRepository;
 import com.ticketing.repository.DatabaseRepository;
-import com.ticketing.repository.TicketingRepository;
 
 import java.util.ArrayList;
 import java.util.List;

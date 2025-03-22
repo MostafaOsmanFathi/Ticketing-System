@@ -9,6 +9,8 @@ public interface AccountRepository {
 
     boolean deposit(Account account, double amount);
 
+    boolean depositToAccountByAccountId(int accountId, double amount);
+
     boolean withdraw(Account account, double amount);
 
     default boolean createEventOrganizerAccount(Account account) {

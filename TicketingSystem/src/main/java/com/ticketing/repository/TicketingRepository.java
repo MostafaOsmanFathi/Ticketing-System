@@ -16,5 +16,4 @@ public interface TicketingRepository {
     /// Customer Organizer operations
     boolean addTicketToCustomer(Customer customer, CustomerTicket customerTicket);
 
-
 }
