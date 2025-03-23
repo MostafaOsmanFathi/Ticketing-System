@@ -2,8 +2,17 @@ package com.ticketing.repository;
 
 import com.ticketing.model.*;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.*;
+import java.util.Properties;
+
 public class DatabaseRepository implements AccountRepository, TicketingRepository {
     private static DatabaseRepository instance;
+    private String url;
+    private String user;
+    private String password;
+    private Connection connection;
 
     public static DatabaseRepository getInstance() {
         if (instance == null) {
@@ -13,6 +22,25 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
     }
 
     private DatabaseRepository() {
+        try {
+            loadConfiguration();
+            this.connection = DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void loadConfiguration() {
+        try (InputStream input = ClassLoader.getSystemResourceAsStream("config.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+            this.url = prop.getProperty("jdbc.url");
+            this.user = prop.getProperty("jdbc.user");
+            this.password = prop.getProperty("jdbc.password");
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to load configuration", ex);
+        }
     }
 
     @Override
