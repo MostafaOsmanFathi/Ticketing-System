@@ -67,7 +67,7 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
 
     @Override
     public TicketType getTicketType(int eventId, int ticketTypeId) {
-        return false;
+        return null;
     }
 
     @Override
