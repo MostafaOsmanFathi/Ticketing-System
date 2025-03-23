@@ -31,8 +31,23 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
     }
 
     @Override
+    public boolean depositToAccountByAccountId(int accountId, double amount) {
+        return false;
+    }
+
+    @Override
     public boolean withdraw(Account account, double amount) {
         return false;
+    }
+
+    @Override
+    public boolean createEventOrganizerAccount(Account account) {
+        return AccountRepository.super.createEventOrganizerAccount(account);
+    }
+
+    @Override
+    public boolean createEventCustomerAccount(Account account) {
+        return AccountRepository.super.createEventCustomerAccount(account);
     }
 
     @Override
@@ -41,8 +56,8 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
     }
 
     @Override
-    public boolean getEvent(int eventId) {
-        return false;
+    public Event getEvent(int eventOrganizerId, int eventId) {
+        return null;
     }
 
     @Override
@@ -51,7 +66,7 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
     }
 
     @Override
-    public boolean getTicketType(int eventId, int ticketTypeId) {
+    public TicketType getTicketType(int eventId, int ticketTypeId) {
         return false;
     }
 

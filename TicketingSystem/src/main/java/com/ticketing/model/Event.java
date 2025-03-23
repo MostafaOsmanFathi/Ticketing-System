@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
+    private int eventId;
     private String eventName;
     private String eventType;
     private String eventDescription;
     private final List<TicketType> ticketTypes;
 
-    public Event(String eventName, String eventType, String eventDescription) {
+    public Event(int eventId, String eventName, String eventType, String eventDescription) {
+        this.eventId = eventId;
         this.eventName = eventName;
         this.eventType = eventType;
         this.eventDescription = eventDescription;
@@ -49,5 +51,9 @@ public class Event {
 
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
+    }
+
+    public int getEventId() {
+        return eventId;
     }
 }
