@@ -7,11 +7,19 @@ public interface AccountRepository {
 
     Account getAccount(String email, String password);
 
-    boolean deposit(Account account, double amount);
 
     boolean depositToAccountByAccountId(int accountId, double amount);
 
-    boolean withdraw(Account account, double amount);
+    default boolean deposit(Account account, double amount) {
+        return depositToAccountByAccountId(account.getAccountId(), amount);
+    }
+
+    public boolean withdrawAccountById(int accountId, double amount);
+
+
+    default boolean withdraw(Account account, double amount) {
+        return withdrawAccountById(account.getAccountId(), amount);
+    }
 
     default boolean createEventOrganizerAccount(Account account) {
         return createAccount(account, "EventOrganizer");

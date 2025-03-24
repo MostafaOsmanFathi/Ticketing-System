@@ -70,4 +70,8 @@ public class Account {
     public double getWalletBalance() {
         return walletBalance;
     }
+
+    public String getPassword() {
+        return password;
+    }
 }

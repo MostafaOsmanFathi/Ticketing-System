@@ -45,26 +45,86 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
 
     @Override
     public boolean createAccount(Account account, String accountType) {
+        String insertAccountSQL = "INSERT INTO Account (idAccount, name, email, password, balance) VALUES (?, ?, ?, ?, ?)";
+        String insertRoleSQL = accountType.equalsIgnoreCase("Customer")
+                ? "INSERT INTO Customer (idCustomer, Account_idAccount) VALUES (?, ?)"
+                : "INSERT INTO EventOrganizer (idEventOrganizer, Account_idAccount) VALUES (?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(insertAccountSQL);
+             PreparedStatement stmtRole = connection.prepareStatement(insertRoleSQL)) {
+            connection.setAutoCommit(false);
+
+            stmt.setInt(1, account.getAccountId());
+            stmt.setString(2, account.getUserName());
+            stmt.setString(3, account.getEmail());
+            stmt.setString(4, account.getPassword());
+            stmt.setDouble(5, account.getWalletBalance());
+            stmt.executeUpdate();
+
+            stmtRole.setInt(1, account.getAccountId());
+            stmtRole.setInt(2, account.getAccountId());
+            stmtRole.executeUpdate();
+
+            connection.commit();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+        }
         return false;
     }
 
+
     @Override
     public Account getAccount(String email, String password) {
+        String sql = "SELECT * FROM Account WHERE email = ? AND password = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Account(
+                        rs.getInt("idAccount"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("password")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
-    public boolean deposit(Account account, double amount) {
-        return false;
-    }
-
-    @Override
     public boolean depositToAccountByAccountId(int accountId, double amount) {
+        String sql = "UPDATE Account SET balance = balance + ? WHERE idAccount = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setDouble(1, amount);
+            stmt.setInt(2, accountId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
+
     @Override
-    public boolean withdraw(Account account, double amount) {
+    public boolean withdrawAccountById(int accountId, double amount) {
+        String sql = "UPDATE Account SET balance = balance - ? WHERE idAccount = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setDouble(1, amount);
+            stmt.setInt(2, accountId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
