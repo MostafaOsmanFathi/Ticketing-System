@@ -31,7 +31,7 @@ public class TicketType {
             throw new IllegalStateException("There no more tickets");
         }
         decreaseNumberOfTicket();
-        return new CustomerTicket(idGenerator.getTicketId(), customerId, eventId);
+        return new CustomerTicket(idGenerator.getTicketId(), customerId, ticketTypeId, eventId);
     }
 
     public int getEventOrgnizerId() {
@@ -80,5 +80,9 @@ public class TicketType {
 
     public int getEventId() {
         return eventId;
+    }
+
+    public int getNumberOfTickets() {
+        return numberOfTickets;
     }
 }

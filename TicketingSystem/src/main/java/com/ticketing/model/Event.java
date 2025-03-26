@@ -4,18 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
-    private int eventId;
+    private final int eventId;
+    private final int eventOrganizerId;
     private String eventName;
     private String eventType;
     private String eventDescription;
     private final List<TicketType> ticketTypes;
 
-    public Event(int eventId, String eventName, String eventType, String eventDescription) {
+    public Event(int eventId, int eventOrganizerId, String eventName, String eventType, String eventDescription) {
         this.eventId = eventId;
+        this.eventOrganizerId = eventOrganizerId;
         this.eventName = eventName;
         this.eventType = eventType;
         this.eventDescription = eventDescription;
         this.ticketTypes = new ArrayList<>();
+    }
+
+    public int getEventOrganizerId() {
+        return eventOrganizerId;
     }
 
     public boolean addTicketType(TicketType ticketType) {

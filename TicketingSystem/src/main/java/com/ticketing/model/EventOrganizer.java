@@ -6,9 +6,16 @@ import java.util.List;
 public class EventOrganizer extends Account {
     private final List<Event> events;
 
-    public EventOrganizer(int accountId, String name, String email, String password) {
+    private final int eventOrganizerId;
+
+    public EventOrganizer(int accountId, int eventOrganizerId, String name, String email, String password) {
         super(accountId, name, email, password);
+        this.eventOrganizerId = eventOrganizerId;
         this.events = new ArrayList<Event>();
+    }
+
+    public int getEventOrganizerId() {
+        return eventOrganizerId;
     }
 
     public boolean addEvent(Event event) {
