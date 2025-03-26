@@ -2,7 +2,6 @@ package com.ticketing.repository;
 
 import com.ticketing.model.*;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
