@@ -32,33 +32,29 @@ CREATE TABLE Event
     idEvent                         INT PRIMARY KEY,
     eventName                       VARCHAR(45),
     eventType                       VARCHAR(45),
-    eventDescription                VARCHAR(45),
+    eventDescription                VARCHAR(255),
     EventOrganizer_idEventOrganizer INT,
     FOREIGN KEY (EventOrganizer_idEventOrganizer) REFERENCES EventOrganizer (idEventOrganizer)
 );
 
 CREATE TABLE TicketType
 (
-    idTicketType  INT PRIMARY KEY,
-    Event_idEvent INT,
-    FOREIGN KEY (Event_idEvent) REFERENCES Event (idEvent)
-);
-
-CREATE TABLE TicketInfo
-(
-    idTicketInfo            INT PRIMARY KEY,
-    ticketPrice             DOUBLE,
-    ticketName              VARCHAR(45),
-    expirationDate          VARCHAR(45),
-    TicketType_idTicketType INT,
-    FOREIGN KEY (TicketType_idTicketType) REFERENCES TicketType (idTicketType)
+    idTicketType    INT PRIMARY KEY,
+    ticketPrice     DOUBLE,
+    ticketName      VARCHAR(45),
+    expirationDate  VARCHAR(45),
+    numberOfTickets INT,
+    Event_idEvent   INT,
+    EventOrganizer_id INT,
+    FOREIGN KEY (Event_idEvent) REFERENCES Event (idEvent),
+    foreign key (EventOrganizer_id) REFERENCES EventOrganizer(idEventOrganizer)
 );
 
 CREATE TABLE CustomerTicket
 (
     idCustomerTicket        INT PRIMARY KEY,
     Customer_idCustomer     INT,
-    TicketInfo_idTicketInfo INT,
+    TicketType_idTicketType INT,
     FOREIGN KEY (Customer_idCustomer) REFERENCES Customer (idCustomer),
-    FOREIGN KEY (TicketInfo_idTicketInfo) REFERENCES TicketInfo (idTicketInfo)
+    FOREIGN KEY (TicketType_idTicketType) REFERENCES TicketType (idTicketType)
 );
