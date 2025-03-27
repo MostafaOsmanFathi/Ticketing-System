@@ -2,7 +2,9 @@ package com.ticketing.repository;
 
 import com.ticketing.model.*;
 
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
 import java.util.Properties;
 
@@ -24,6 +26,7 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
         try {
             loadConfiguration();
             this.connection = DriverManager.getConnection(url, user, password);
+            connection.setAutoCommit(false);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -203,4 +206,49 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
             return false;
         }
     }
+
+    public void clearDatabase() {
+        getInstance();
+        try {
+            String schema_sql = Files.readString(Path.of("src/main/resources/db/schema.sql"));
+
+            // Split script into individual statements
+            executeSqlScript(schema_sql);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public void readSeed() {
+        getInstance();
+        try {
+            String schema_sql = Files.readString(Path.of("src/main/resources/db/seed.sql"));
+
+            // Split script into individual statements
+            executeSqlScript(schema_sql);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    private void executeSqlScript(String schema_sql) throws SQLException {
+        String[] sqlStatements = schema_sql.split(";");
+
+        try (Statement statement = connection.createStatement()) {
+            for (String sql : sqlStatements) {
+                sql = sql.trim(); // Remove unnecessary spaces
+                if (!sql.isEmpty()) { // Ignore empty statements
+                    statement.execute(sql);
+                }
+            }
+        }
+
+        connection.commit();
+    }
+
+
 }
