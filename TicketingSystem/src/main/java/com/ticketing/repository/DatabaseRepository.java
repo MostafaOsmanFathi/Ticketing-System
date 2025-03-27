@@ -87,7 +87,11 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return new Account(rs.getInt("idAccount"), rs.getString("name"), rs.getString("email"), rs.getString("password"));
+                Account account = new Account(rs.getInt("idAccount"), rs.getString("name"), rs.getString("email"), rs.getString("password"));
+                double walletBalance = rs.getDouble("balance");
+                if (walletBalance != 0)
+                    account.deposit(walletBalance);
+                return account;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,7 +105,10 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setDouble(1, amount);
             stmt.setInt(2, accountId);
-            return stmt.executeUpdate() > 0;
+
+            int effectedRows = stmt.executeUpdate();
+            connection.commit();
+            return effectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -115,7 +122,9 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setDouble(1, amount);
             stmt.setInt(2, accountId);
-            return stmt.executeUpdate() > 0;
+            int effectedRows = stmt.executeUpdate();
+            connection.commit();
+            return effectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
