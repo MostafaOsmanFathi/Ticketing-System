@@ -1,8 +1,14 @@
-DROP DATABASE IF EXISTS TicketingSystem;
-
-CREATE DATABASE TicketingSystem;
+CREATE DATABASE IF NOT EXISTS TicketingSystem;
 
 USE TicketingSystem;
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS CustomerTicket;
+DROP TABLE IF EXISTS TicketType;
+DROP TABLE IF EXISTS Event;
+DROP TABLE IF EXISTS EventOrganizer;
+DROP TABLE IF EXISTS Customer;
+DROP TABLE IF EXISTS Account;
 
 CREATE TABLE Account
 (
@@ -39,15 +45,15 @@ CREATE TABLE Event
 
 CREATE TABLE TicketType
 (
-    idTicketType    INT PRIMARY KEY,
-    ticketPrice     DOUBLE,
-    ticketName      VARCHAR(45),
-    expirationDate  VARCHAR(45),
-    numberOfTickets INT,
-    Event_idEvent   INT,
+    idTicketType      INT PRIMARY KEY,
+    ticketPrice       DOUBLE,
+    ticketName        VARCHAR(45),
+    expirationDate    VARCHAR(45),
+    numberOfTickets   INT,
+    Event_idEvent     INT,
     EventOrganizer_id INT,
     FOREIGN KEY (Event_idEvent) REFERENCES Event (idEvent),
-    foreign key (EventOrganizer_id) REFERENCES EventOrganizer(idEventOrganizer)
+    foreign key (EventOrganizer_id) REFERENCES EventOrganizer (idEventOrganizer)
 );
 
 CREATE TABLE CustomerTicket
@@ -58,3 +64,5 @@ CREATE TABLE CustomerTicket
     FOREIGN KEY (Customer_idCustomer) REFERENCES Customer (idCustomer),
     FOREIGN KEY (TicketType_idTicketType) REFERENCES TicketType (idTicketType)
 );
+
+SET FOREIGN_KEY_CHECKS = 1;
