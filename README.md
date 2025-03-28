@@ -1,52 +1,62 @@
 # Ticketing System
 
 ## Overview
-The **Ticketing System** is a Java-based application designed to manage and track support tickets efficiently. This project serves as an educational exercise in implementing Object-Oriented Programming (OOP) principles and system design in Java.
+
+The **Ticketing System** is a Java-based application for managing and tracking support tickets. It serves as an educational project to practice **Object-Oriented Programming (OOP)** and **system design** in Java.
+
+## Unit Testing
+
+For project unit tests, see [Testing Guide](/TicketingSystem/src/test/java/com/ticketing/README.md).
 
 ## Features
-- Create, update, and delete tickets
-- Assign tickets to different users
-- Track ticket statuses
-- Database integration for persistent storage
-- Well-structured package organization following MVC principles
 
-## Technologies Used
-- **Java** (Core programming language)
-- **JDBC** (For making creating connection with mysql)
-- **MySql** (Database options)
+- Create, update, and delete tickets
+- Assign tickets to users
+- Track ticket statuses
+- Persistent storage with MySQL
+- Follows a **layered architecture** for better separation of concerns
+
+## Technologies
+
+- **Java 17+**
+- **JDBC** (MySQL database connection)
+- **MySQL** (Persistent storage)
 - **JUnit** (Testing framework)
+- **Maven** (Dependency management)
 
 ## Project Structure
+
+The project follows a **layered architecture**, organizing code into distinct layers for maintainability and scalability.
+
 ```
 TicketingSystem
-│── .idea/                    # IntelliJ IDEA project settings
 │── src/
-│   ├── main/
-│   │   ├── java/com/ticketing/
-│   │   │   ├── model/         # Entity classes
-│   │   │   ├── repository/    # Database repositories
-│   │   │   ├── service/       # Business logic
-│   │   │   ├── util/          # Utility classes
-│   │   ├── resources/
-│   │       ├── db/            # Database configurations
-│   ├── test/
-│       ├── java/com/ticketing/
-│       │   ├── model/         # Model tests
-│       │   ├── repository/    # Repository tests
-│       │   ├── service/       # Service tests
-│── target/                    # Compiled classes and build artifacts
-│── pom.xml                     # Maven build configuration
+│   ├── main/java/com/ticketing/
+│   │   ├── model/         # Data layer (entities)
+│   │   ├── repository/    # Data access layer (database interactions)
+│   │   ├── service/       # Business logic layer (processing rules)
+│   │   ├── util/          # Utility layer (helper functions)
+│   ├── main/resources/db/ # Database configurations
+│   ├── test/java/com/ticketing/
+│       ├── model/         # Model tests
+│       ├── repository/    # Repository tests
+│       ├── service/       # Service tests
+│── pom.xml                # Maven build file
 ```
 
-## Getting Started
+## Setup
+
 ### Prerequisites
-- Java 17+
-- Maven
-- MySql (if using a persistent database)
+
+- **Java 17+**
+- **Maven**
+- **MySQL** (if using a database)
 
 ## License
-This project is licensed under the MIT License.
+
+Licensed under the **MIT License**.
 
 ## Contact
-For any inquiries, you can reach out to **Mostafa Osman** at mostafa.osman.fathi@gmail.com.
+
+For inquiries, contact **Mostafa Osman** at [mostafa.osman.fathi@gmail.com](mailto:mostafa.osman.fathi@gmail.com).  
 
