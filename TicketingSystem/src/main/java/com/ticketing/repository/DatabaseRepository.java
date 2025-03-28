@@ -139,7 +139,9 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
             stmt.setString(3, event.getEventType());
             stmt.setString(4, event.getEventDescription());
             stmt.setInt(5, eventOrganizer.getEventOrganizerId());
-            return stmt.executeUpdate() > 0;
+            boolean effectedRows = stmt.executeUpdate() > 0;
+            connection.commit();
+            return effectedRows;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -171,6 +173,7 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
             ps.setInt(5, event.getEventId());
 
             int rowsAffected = ps.executeUpdate();
+            connection.commit();
             return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -209,6 +212,7 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
             ps.setInt(3, customerTicket.getTicketTypeId());
 
             int rowsAffected = ps.executeUpdate();
+            connection.commit();
             return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -255,9 +259,18 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
                 }
             }
         }
-
         connection.commit();
     }
 
+    public void commitChanges() throws SQLException {
+        connection.commit();
+    }
 
+    public void enableAutoCommit() throws SQLException {
+        connection.setAutoCommit(true);
+    }
+
+    public void disableAutoCommit() throws SQLException {
+        connection.setAutoCommit(false);
+    }
 }

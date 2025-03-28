@@ -25,7 +25,7 @@ public interface AccountRepository {
         return createAccount(account, "EventOrganizer");
     }
 
-    default boolean createEventCustomerAccount(Account account) {
+    default boolean createCustomerAccount(Account account) {
         return createAccount(account, "Customer");
     }
 }
