@@ -14,6 +14,12 @@ public class EventOrganizer extends Account {
         this.events = new ArrayList<Event>();
     }
 
+    public EventOrganizer(Account account, int eventOrganizerId) {
+        super(account);
+        this.eventOrganizerId = eventOrganizerId;
+        this.events = new ArrayList<Event>();
+    }
+
     public int getEventOrganizerId() {
         return eventOrganizerId;
     }

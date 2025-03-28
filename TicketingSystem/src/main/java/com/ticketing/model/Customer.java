@@ -13,6 +13,12 @@ public class Customer extends Account {
         this.customerTickets = new ArrayList<CustomerTicket>();
     }
 
+    public Customer(Account account, int customerId) {
+        super(account);
+        this.customerId = customerId;
+        this.customerTickets = new ArrayList<CustomerTicket>();
+    }
+
     public int getCustomerId() {
         return customerId;
     }

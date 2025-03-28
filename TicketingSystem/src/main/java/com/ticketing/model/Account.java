@@ -22,6 +22,14 @@ public class Account {
 
     }
 
+    public Account(Account account) {
+        this.accountId = account.getAccountId();
+        this.userName = account.getUserName();
+        this.email = account.getEmail();
+        this.password = account.getPassword();
+        this.walletBalance = account.getWalletBalance();
+    }
+
     public boolean changePassword(String newPassword) {
         if (this.password.equals(newPassword)) {
             this.password = newPassword;
