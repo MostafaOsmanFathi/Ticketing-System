@@ -2,6 +2,8 @@ package com.ticketing.service;
 
 import com.ticketing.enums.AccountType;
 import com.ticketing.model.Account;
+import com.ticketing.model.Customer;
+import com.ticketing.model.EventOrganizer;
 import com.ticketing.repository.AccountRepository;
 import com.ticketing.repository.DatabaseRepository;
 
@@ -26,6 +28,15 @@ public class AccountService {
 
     public boolean login(String email, String password) {
         this.account = accountRepository.getAccount(email, password);
+
+        if (accountRepository.getAccountType(account.getAccountId()).equals(AccountType.Customer)) {
+            int customerId = accountRepository.getCustomerId(account.getAccountId());
+            account = new Customer(account, customerId);
+        } else {
+            int eventOrganizerId = accountRepository.getEventOrganizerId(account.getAccountId());
+            account = new EventOrganizer(account, eventOrganizerId);
+        }
+
         this.payments = new ArrayList<PaymentInterface>();
         this.payments.add(new sudoPayment());
         if (account == null) {
@@ -58,8 +69,12 @@ public class AccountService {
         }
 
         return payments.get(defaultPaymentIdx).pay(amount)
-                && accountRepository.deposit(account, amount)
-                && account.deposit(amount);
+                && accountRepository.withdraw(account, amount)
+                && account.withdraw(amount);
+    }
+
+    public Account getAccount() {
+        return account;
     }
 
     public void logout() {

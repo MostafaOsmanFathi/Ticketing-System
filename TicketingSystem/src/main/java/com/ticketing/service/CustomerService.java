@@ -1,6 +1,5 @@
 package com.ticketing.service;
 
-import com.ticketing.model.Account;
 import com.ticketing.model.Customer;
 import com.ticketing.model.CustomerTicket;
 import com.ticketing.model.TicketType;
@@ -27,18 +26,23 @@ public class CustomerService {
     }
 
 
-    boolean buyTicket(Account account, TicketType ticket) {
-        if (account instanceof Customer customer) {
-            if (customer.withdraw(ticket.getTicketPrice()) &&
-                    accountRepository.depositToAccountByAccountId(ticket.getEventOrgnizerId(), ticket.getTicketPrice())) {
+    boolean buyTicket(Customer customer, TicketType ticket) {
+        if (customer.withdraw(ticket.getTicketPrice()) &&
+                accountRepository.withdraw(customer, ticket.getTicketPrice()) &&
+                accountRepository.depositToAccountByAccountId(ticket.getEventOrgnizerId(), ticket.getTicketPrice())) {
 
-                CustomerTicket newTicket = ticket.generateCustomerTicket(account.getAccountId());
+            CustomerTicket newTicket = ticket.generateCustomerTicket(customer.getAccountId());
 
-                return ticketingRepository.addTicketToCustomer(customer, newTicket)
-                        && customer.addCustomerTicket(newTicket);
-            }
+            return ticketingRepository.addTicketToCustomer(customer, newTicket)
+                    && customer.addCustomerTicket(newTicket)
+                    && ticket.decreaseNumberOfTicket()
+                    && decreaseNumberOfTicket(ticket);
         }
         return false;
+    }
+
+    boolean decreaseNumberOfTicket(TicketType ticket) {
+        return ticketingRepository.decreaseTicketType(ticket.getEventId(), ticket.getTicketTypeId());
     }
 
 }
