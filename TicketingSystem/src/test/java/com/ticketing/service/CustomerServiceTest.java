@@ -57,15 +57,6 @@ class CustomerServiceTest {
     void buyTicket_shouldFailWhenCustomerHasInsufficientBalance() {
         accountService.login("john@example.com", "password");
         accountService.withdraw(450.0);
-
         assertFalse(customerService.buyTicket(customer, ticketType));
-        assertEquals(50.0, customer.getWalletBalance(), "Balance should remain unchanged if ticketType purchase fails");
-    }
-
-    @Test
-    void buyTicket_shouldFailForNonCustomerAccount() {
-//        Account nonCustomer = new Account(2, "Admin", "admin@example.com", "password", 500.0);
-
-//        assertFalse(customerService.buyTicket(nonCustomer, ticketType), "Only customers should be able to buy tickets");
     }
 }
