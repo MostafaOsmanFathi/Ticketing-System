@@ -1,5 +1,6 @@
 package com.ticketing.repository;
 
+import com.ticketing.enums.AccountType;
 import com.ticketing.model.*;
 
 import java.io.*;
@@ -100,6 +101,50 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
     }
 
     @Override
+    public AccountType getAccountType(int accountId) {
+        String sql = "SELECT * FROM Customer WHERE Account_idAccount = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, accountId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return AccountType.Customer;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return AccountType.EventOrganizer;
+    }
+
+    public int getCustomerId(int accountId) {
+        String sql = "SELECT * FROM Customer WHERE Account_idAccount = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, accountId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("idCustomer");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int getEventOrganizerId(int accountId) {
+        String sql = "SELECT * FROM EventOrganizer WHERE Account_idAccount = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, accountId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("idEventOrganizer");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    @Override
     public boolean depositToAccountByAccountId(int accountId, double amount) {
         String sql = "UPDATE Account SET balance = balance + ? WHERE idAccount = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -118,10 +163,11 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
 
     @Override
     public boolean withdrawAccountById(int accountId, double amount) {
-        String sql = "UPDATE Account SET balance = balance - ? WHERE idAccount = ?";
+        String sql = "UPDATE Account SET balance = balance - ? WHERE idAccount = ? AND balance >= ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setDouble(1, amount);
             stmt.setInt(2, accountId);
+            stmt.setDouble(3, amount);
             int effectedRows = stmt.executeUpdate();
             connection.commit();
             return effectedRows > 0;
@@ -202,6 +248,21 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public boolean decreaseTicketType(int eventId, int ticketTypeId) {
+        String sql = "UPDATE TicketType SET numberOfTickets = numberOfTickets - ? WHERE Event_idEvent = ? AND idTicketType = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, 1);
+            ps.setInt(2, eventId);
+            ps.setInt(3, ticketTypeId);
+            int rowsAffected = ps.executeUpdate();
+            connection.commit();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     public boolean addTicketToCustomer(Customer customer, CustomerTicket customerTicket) {

@@ -1,5 +1,6 @@
 package com.ticketing.repository;
 
+import com.ticketing.enums.AccountType;
 import com.ticketing.model.Account;
 
 public interface AccountRepository {
@@ -7,6 +8,11 @@ public interface AccountRepository {
 
     Account getAccount(String email, String password);
 
+    AccountType getAccountType(int accountId);
+
+    public int getCustomerId(int accountId);
+
+    public int getEventOrganizerId(int accountId);
 
     boolean depositToAccountByAccountId(int accountId, double amount);
 

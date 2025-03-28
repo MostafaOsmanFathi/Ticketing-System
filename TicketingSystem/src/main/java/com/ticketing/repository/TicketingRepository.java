@@ -12,6 +12,7 @@ public interface TicketingRepository {
 
     TicketType getTicketType(int eventId, int ticketTypeId);
 
+    boolean decreaseTicketType(int eventId, int ticketTypeId);
 
     /// Customer Organizer operations
     boolean addTicketToCustomer(Customer customer, CustomerTicket customerTicket);
