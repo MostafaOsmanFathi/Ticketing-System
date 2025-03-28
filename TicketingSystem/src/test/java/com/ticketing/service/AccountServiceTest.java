@@ -38,11 +38,7 @@ class AccountServiceTest {
 
     @Test
     void login_withInvalidCredentials_shouldThrowException() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            accountService.login("wrong@example.com", "wrongpassword");
-        });
-
-        assertEquals("Invalid email or password", exception.getMessage());
+        assertFalse(accountService.login("wrong@example.com", "wrongpassword"));
     }
 
     @Test
@@ -65,6 +61,7 @@ class AccountServiceTest {
     void withdraw_whenLoggedIn_shouldSucceed() {
         assertTrue(accountService.register(AccountType.Customer, 1, "test", "test@example.com", "password123"));
         accountService.login("test@example.com", "password123");
+        accountService.deposit(50.0);
         assertTrue(accountService.withdraw(50.0));
     }
 

@@ -28,8 +28,9 @@ public class AccountService {
 
     public boolean login(String email, String password) {
         this.account = accountRepository.getAccount(email, password);
-
-        if (accountRepository.getAccountType(account.getAccountId()).equals(AccountType.Customer)) {
+        if (account == null) {
+            return false;
+        } else if (accountRepository.getAccountType(account.getAccountId()).equals(AccountType.Customer)) {
             int customerId = accountRepository.getCustomerId(account.getAccountId());
             account = new Customer(account, customerId);
         } else {
