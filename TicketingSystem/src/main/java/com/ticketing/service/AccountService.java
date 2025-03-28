@@ -1,5 +1,6 @@
 package com.ticketing.service;
 
+import com.ticketing.enums.AccountType;
 import com.ticketing.model.Account;
 import com.ticketing.repository.AccountRepository;
 import com.ticketing.repository.DatabaseRepository;
@@ -31,6 +32,15 @@ public class AccountService {
             throw new IllegalArgumentException("Invalid email or password");
         }
         return true;
+    }
+
+    public boolean register(AccountType accountType, int accountId, String name, String email, String password) {
+        Account account = new Account(accountId, name, email, password);
+        if (accountType == AccountType.Customer) {
+            return accountRepository.createCustomerAccount(account);
+        } else {
+            return accountRepository.createEventOrganizerAccount(account);
+        }
     }
 
     public boolean deposit(double amount) {
