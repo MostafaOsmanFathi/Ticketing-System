@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS EventOrganizer;
 DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS Account;
 
-CREATE TABLE Account
+CREATE TABLE IF NOT EXISTS Account
 (
     idAccount INT PRIMARY KEY,
     name      VARCHAR(45),
@@ -19,21 +19,21 @@ CREATE TABLE Account
     balance   DOUBLE
 );
 
-CREATE TABLE Customer
+CREATE TABLE IF NOT EXISTS Customer
 (
     idCustomer        INT PRIMARY KEY,
     Account_idAccount INT,
     FOREIGN KEY (Account_idAccount) REFERENCES Account (idAccount)
 );
 
-CREATE TABLE EventOrganizer
+CREATE TABLE IF NOT EXISTS EventOrganizer
 (
     idEventOrganizer  INT PRIMARY KEY,
     Account_idAccount INT,
     FOREIGN KEY (Account_idAccount) REFERENCES Account (idAccount)
 );
 
-CREATE TABLE Event
+CREATE TABLE IF NOT EXISTS Event
 (
     idEvent                         INT PRIMARY KEY,
     eventName                       VARCHAR(45),
@@ -43,7 +43,7 @@ CREATE TABLE Event
     FOREIGN KEY (EventOrganizer_idEventOrganizer) REFERENCES EventOrganizer (idEventOrganizer)
 );
 
-CREATE TABLE TicketType
+CREATE TABLE IF NOT EXISTS TicketType
 (
     idTicketType      INT PRIMARY KEY,
     ticketPrice       DOUBLE,
@@ -56,7 +56,7 @@ CREATE TABLE TicketType
     foreign key (EventOrganizer_id) REFERENCES EventOrganizer (idEventOrganizer)
 );
 
-CREATE TABLE CustomerTicket
+CREATE TABLE IF NOT EXISTS CustomerTicket
 (
     idCustomerTicket        INT PRIMARY KEY,
     Customer_idCustomer     INT,

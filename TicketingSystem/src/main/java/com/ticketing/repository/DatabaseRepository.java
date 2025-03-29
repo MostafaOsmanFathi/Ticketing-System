@@ -7,7 +7,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
-import java.util.Properties;
 
 public abstract class DatabaseRepository implements AccountRepository, TicketingRepository {
     protected String url;
@@ -248,7 +247,7 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
         }
     }
 
-    public void clearDatabase() {
+    public void resetDatabase() {
         try {
             String schema_sql = Files.readString(Path.of("src/main/resources/db/schema.sql"));
 
@@ -260,6 +259,19 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    public void clearDatabase() {
+        try {
+            String schema_sql = "DROP DATABASE TicketingSystem;";
+
+
+            executeSqlScript(schema_sql);
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        resetDatabase();
+    }
+
 
     public void readSeed() {
         try {
@@ -288,6 +300,17 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
         connection.commit();
     }
 
+    protected void createDatabaseIfNotExists() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " + "TicketingSystem");
+            connection.commit();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void commitChanges() throws SQLException {
         connection.commit();
     }
@@ -299,4 +322,5 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
     public void disableAutoCommit() throws SQLException {
         connection.setAutoCommit(false);
     }
+
 }

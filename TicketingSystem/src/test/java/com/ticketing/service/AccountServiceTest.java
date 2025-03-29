@@ -19,7 +19,7 @@ class AccountServiceTest {
         accountRepository = MySqlRepository.getInstance();
         databaseRepository = MySqlRepository.getInstance();
         accountService = new AccountService(MySqlRepository.getInstance());
-        databaseRepository.clearDatabase();
+        databaseRepository.resetDatabase();
         accountService.logout();
     }
 

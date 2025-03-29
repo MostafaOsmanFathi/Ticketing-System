@@ -17,7 +17,7 @@ class DatabaseRepositoryTest {
     @BeforeEach
     void getInstance() {
         repository = MySqlRepository.getInstance();
-        repository.clearDatabase();
+        repository.resetDatabase();
     }
 
     @Test
@@ -107,7 +107,7 @@ class DatabaseRepositoryTest {
 
     @Test
     void addTicketToCustomer() {
-        repository.clearDatabase();
+        repository.resetDatabase();
         Account account = new Account(1005, "User5", "user5@example.com", "pass5");
         repository.createAccount(account, "Customer");
         Customer customer = new Customer(1005, 1005, "User5", "user5@example.com", "pass5");
@@ -124,8 +124,8 @@ class DatabaseRepositoryTest {
     }
 
     @Test
-    void clearDatabase() {
-        repository.clearDatabase();
+    void resetDatabase() {
+        repository.resetDatabase();
     }
 
     @Test

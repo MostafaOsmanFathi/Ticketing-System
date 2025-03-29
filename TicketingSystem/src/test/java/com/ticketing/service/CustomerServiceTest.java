@@ -24,7 +24,7 @@ class CustomerServiceTest {
     void setUp() {
         accountService = new AccountService(MySqlRepository.getInstance());
         databaseRepository = MySqlRepository.getInstance();
-        databaseRepository.clearDatabase();
+        databaseRepository.resetDatabase();
         customerService = CustomerService.getInstance(MySqlRepository.getInstance());
         customer = new Customer(1, 1, "John Doe", "john@example.com", "password");
         customer.deposit(500.0);

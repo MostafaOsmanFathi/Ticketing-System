@@ -1,7 +1,9 @@
 package com.ticketing.repository;
 
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -13,6 +15,7 @@ public class MySqlRepository extends DatabaseRepository {
     public static MySqlRepository getInstance() {
         if (instance == null) {
             instance = new MySqlRepository();
+            instance.createDatabaseIfNotExists();
         }
         return instance;
     }
@@ -39,4 +42,5 @@ public class MySqlRepository extends DatabaseRepository {
             throw new RuntimeException("Failed to load configuration", ex);
         }
     }
+
 }

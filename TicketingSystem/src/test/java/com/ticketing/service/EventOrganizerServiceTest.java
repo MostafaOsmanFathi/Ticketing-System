@@ -1,7 +1,6 @@
 package com.ticketing.service;
 
 import com.ticketing.enums.AccountType;
-import com.ticketing.model.Account;
 import com.ticketing.model.Event;
 import com.ticketing.model.EventOrganizer;
 import com.ticketing.model.TicketType;
@@ -21,7 +20,7 @@ class EventOrganizerServiceTest {
     void setUp() {
         eventOrganizerService = EventOrganizerService.getInstance(MySqlRepository.getInstance());
         databaseRepository = MySqlRepository.getInstance();
-        databaseRepository.clearDatabase();
+        databaseRepository.resetDatabase();
         accountService = new AccountService(MySqlRepository.getInstance());
         accountService.register(AccountType.EventOrganizer, 1, "test", "test@example.com", "password123");
     }
