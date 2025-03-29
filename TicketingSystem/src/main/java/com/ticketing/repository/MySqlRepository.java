@@ -20,6 +20,20 @@ public class MySqlRepository extends DatabaseRepository {
         return instance;
     }
 
+    public MySqlRepository(String hostIP, int port, String user, String password) {
+        super("schema.sql");
+        this.user = user;
+        this.password = password;
+        this.url = String.format("jdbc:mysql://%s:%d/", hostIP, port);
+
+        try {
+            this.connection = DriverManager.getConnection(url, user, password);
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private MySqlRepository() {
         super("schema.sql");
         try {
