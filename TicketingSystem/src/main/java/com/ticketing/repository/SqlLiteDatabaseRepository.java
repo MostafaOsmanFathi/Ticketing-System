@@ -12,13 +12,13 @@ public class SqlLiteDatabaseRepository extends DatabaseRepository {
     public static SqlLiteDatabaseRepository getInstance() {
         if (instance == null) {
             instance = new SqlLiteDatabaseRepository();
-            instance.createDatabaseIfNotExists();
+            instance.resetDatabase();
         }
         return instance;
     }
 
     private SqlLiteDatabaseRepository() {
-        super();
+        super("sqliteSchema.sql");
         try {
             url = "jdbc:sqlite:TicketingSystem.db";
             this.connection = DriverManager.getConnection(url);

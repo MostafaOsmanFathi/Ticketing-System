@@ -21,7 +21,7 @@ public class MySqlRepository extends DatabaseRepository {
     }
 
     private MySqlRepository() {
-        super();
+        super("schema.sql");
         try {
             loadConfiguration();
             this.connection = DriverManager.getConnection(url, user, password);

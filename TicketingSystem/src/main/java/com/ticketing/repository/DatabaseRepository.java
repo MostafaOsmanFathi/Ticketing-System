@@ -11,6 +11,11 @@ import java.sql.*;
 public abstract class DatabaseRepository implements AccountRepository, TicketingRepository {
     protected String url;
     protected Connection connection;
+    protected String defaultSchema;
+
+    public DatabaseRepository(String defaultSchema) {
+        this.defaultSchema = defaultSchema;
+    }
 
     @Override
     public boolean createAccount(Account account, String accountType) {
@@ -249,7 +254,7 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
 
     public void resetDatabase() {
         try {
-            String schema_sql = Files.readString(Path.of("src/main/resources/db/schema.sql"));
+            String schema_sql = Files.readString(Path.of("src/main/resources/db/" + defaultSchema));
 
             // Split script into individual statements
             executeSqlScript(schema_sql);
