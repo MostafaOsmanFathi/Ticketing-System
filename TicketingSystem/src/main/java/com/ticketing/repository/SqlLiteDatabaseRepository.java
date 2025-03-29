@@ -17,10 +17,29 @@ public class SqlLiteDatabaseRepository extends DatabaseRepository {
         return instance;
     }
 
+    public static SqlLiteDatabaseRepository getInstance(String filePath) {
+        if (instance == null) {
+            instance = new SqlLiteDatabaseRepository(filePath);
+            instance.resetDatabase();
+        }
+        return instance;
+    }
+
     private SqlLiteDatabaseRepository() {
         super("sqliteSchema.sql");
         try {
             url = "jdbc:sqlite:TicketingSystem.db";
+            this.connection = DriverManager.getConnection(url);
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private SqlLiteDatabaseRepository(String filePath) {
+        super("sqliteSchema.sql");
+        try {
+            url = "jdbc:sqlite:" + filePath;
             this.connection = DriverManager.getConnection(url);
             connection.setAutoCommit(false);
         } catch (SQLException e) {

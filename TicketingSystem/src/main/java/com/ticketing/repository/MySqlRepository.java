@@ -20,7 +20,15 @@ public class MySqlRepository extends DatabaseRepository {
         return instance;
     }
 
-    public MySqlRepository(String hostIP, int port, String user, String password) {
+    public static MySqlRepository getInstance(String hostIP, int port, String user, String password) {
+        if (instance == null) {
+            instance = new MySqlRepository(hostIP, port, user, password);
+            instance.createDatabaseIfNotExists();
+        }
+        return instance;
+    }
+
+    private MySqlRepository(String hostIP, int port, String user, String password) {
         super("schema.sql");
         this.user = user;
         this.password = password;

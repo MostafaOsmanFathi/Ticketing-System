@@ -1,11 +1,14 @@
 package com.ticketing.view;
 
+import com.ticketing.repository.DatabaseRepository;
+import com.ticketing.repository.MySqlRepository;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class LoginPage extends BaseWindow {
 
-    public LoginPage() {
+    public LoginPage(DatabaseRepository databaseRepository) {
         super("Login - Ticketing System");
 
         // Get main panel from BaseWindow
@@ -21,21 +24,25 @@ public class LoginPage extends BaseWindow {
         gbc.insets = new Insets(10, 10, 10, 10); // Spacing
 
         // Email Label & Field
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         formPanel.add(new JLabel("Email:"), gbc);
         gbc.gridx = 1;
         JTextField email = new JTextField(15);
         formPanel.add(email, gbc);
 
         // Password Label & Field
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         formPanel.add(new JLabel("Password:"), gbc);
         gbc.gridx = 1;
         JPasswordField passwordField = new JPasswordField(15);
         formPanel.add(passwordField, gbc);
 
         // Login Button
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
         JButton loginButton = new JButton("Login");
         formPanel.add(loginButton, gbc);
 
@@ -50,7 +57,7 @@ public class LoginPage extends BaseWindow {
         // Back Button Functionality
         back.addActionListener(e -> {
             dispose();
-            new MainMenu();
+            new MainMenu(databaseRepository);
         });
 
         // Refresh UI
@@ -59,6 +66,8 @@ public class LoginPage extends BaseWindow {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(LoginPage::new);
+        SwingUtilities.invokeLater(() -> {
+            new MainMenu(MySqlRepository.getInstance());
+        });
     }
 }

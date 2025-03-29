@@ -1,12 +1,15 @@
 package com.ticketing.view;
 
 
+import com.ticketing.repository.DatabaseRepository;
+import com.ticketing.repository.MySqlRepository;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MainMenu extends BaseWindow {
 
-    public MainMenu() {
+    public MainMenu(DatabaseRepository databaseRepository) {
         super("Ticketing System");
 
         // Get the main panel from BaseWindow
@@ -44,15 +47,17 @@ public class MainMenu extends BaseWindow {
         repaint();
         loginButton.addActionListener(e -> {
             dispose();
-            new LoginPage();
+            new LoginPage(databaseRepository);
         });
         registerButton.addActionListener(e -> {
             dispose();
-            new RegisterPage();
+            new RegisterPage(databaseRepository);
         });
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(MainMenu::new);
+        SwingUtilities.invokeLater(() -> {
+            new MainMenu(MySqlRepository.getInstance());
+        });
     }
 }

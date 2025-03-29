@@ -1,11 +1,14 @@
 package com.ticketing.view;
 
+import com.ticketing.repository.DatabaseRepository;
+import com.ticketing.repository.MySqlRepository;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class RegisterPage extends BaseWindow {
 
-    public RegisterPage() {
+    public RegisterPage(DatabaseRepository databaseRepository) {
         super("Register - Ticketing System");
 
         // Get main panel from BaseWindow
@@ -63,7 +66,7 @@ public class RegisterPage extends BaseWindow {
 
         back.addActionListener(e -> {
             dispose();
-            new MainMenu();
+            new MainMenu(databaseRepository);
         });
 
 
@@ -73,6 +76,8 @@ public class RegisterPage extends BaseWindow {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(RegisterPage::new);
+        SwingUtilities.invokeLater(() -> {
+            MySqlRepository.getInstance();
+        });
     }
 }
