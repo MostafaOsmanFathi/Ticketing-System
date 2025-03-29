@@ -19,9 +19,9 @@ public class AccountService {
     AccountRepository accountRepository;
 
 
-    public AccountService() {
+    public AccountService(DatabaseRepository databaseRepository) {
         this.account = null;
-        this.accountRepository = DatabaseRepository.getInstance();
+        this.accountRepository = databaseRepository;
         this.payments = new ArrayList<PaymentInterface>();
         this.payments.add(new sudoPayment());
     }

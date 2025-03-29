@@ -3,6 +3,7 @@ package com.ticketing.service;
 import com.ticketing.enums.AccountType;
 import com.ticketing.repository.AccountRepository;
 import com.ticketing.repository.DatabaseRepository;
+import com.ticketing.repository.MySqlRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +16,9 @@ class AccountServiceTest {
 
     @BeforeEach
     void setUp() {
-        accountRepository = DatabaseRepository.getInstance();
-        databaseRepository = DatabaseRepository.getInstance();
-        accountService = new AccountService();
+        accountRepository = MySqlRepository.getInstance();
+        databaseRepository = MySqlRepository.getInstance();
+        accountService = new AccountService(MySqlRepository.getInstance());
         databaseRepository.clearDatabase();
         accountService.logout();
     }

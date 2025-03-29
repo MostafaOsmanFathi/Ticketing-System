@@ -2,6 +2,7 @@ package com.ticketing.service;
 
 import com.ticketing.model.*;
 import com.ticketing.repository.DatabaseRepository;
+import com.ticketing.repository.MySqlRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,12 +18,14 @@ class CustomerServiceTest {
     private TicketType ticketType;
     private DatabaseRepository databaseRepository;
 
+
+
     @BeforeEach
     void setUp() {
-        accountService = new AccountService();
-        databaseRepository = DatabaseRepository.getInstance();
+        accountService = new AccountService(MySqlRepository.getInstance());
+        databaseRepository = MySqlRepository.getInstance();
         databaseRepository.clearDatabase();
-        customerService = CustomerService.getInstance();
+        customerService = CustomerService.getInstance(MySqlRepository.getInstance());
         customer = new Customer(1, 1, "John Doe", "john@example.com", "password");
         customer.deposit(500.0);
         eventOrganizer = new EventOrganizer(2, 2, "Mostafa", "Mostafa@example.com", "password");
@@ -42,8 +45,8 @@ class CustomerServiceTest {
 
     @Test
     void getInstance_shouldReturnSameInstance() {
-        CustomerService instance1 = CustomerService.getInstance();
-        CustomerService instance2 = CustomerService.getInstance();
+        CustomerService instance1 = CustomerService.getInstance(MySqlRepository.getInstance());
+        CustomerService instance2 = CustomerService.getInstance(MySqlRepository.getInstance());
         assertSame(instance1, instance2, "getInstance should return the same instance (Singleton pattern)");
     }
 

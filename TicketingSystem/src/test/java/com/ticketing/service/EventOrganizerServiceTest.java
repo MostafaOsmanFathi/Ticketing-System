@@ -6,6 +6,7 @@ import com.ticketing.model.Event;
 import com.ticketing.model.EventOrganizer;
 import com.ticketing.model.TicketType;
 import com.ticketing.repository.DatabaseRepository;
+import com.ticketing.repository.MySqlRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,17 +19,17 @@ class EventOrganizerServiceTest {
 
     @BeforeEach
     void setUp() {
-        eventOrganizerService = EventOrganizerService.getInstance();
-        databaseRepository = DatabaseRepository.getInstance();
+        eventOrganizerService = EventOrganizerService.getInstance(MySqlRepository.getInstance());
+        databaseRepository = MySqlRepository.getInstance();
         databaseRepository.clearDatabase();
-        accountService = new AccountService();
+        accountService = new AccountService(MySqlRepository.getInstance());
         accountService.register(AccountType.EventOrganizer, 1, "test", "test@example.com", "password123");
     }
 
     @Test
     void getInstance() {
-        EventOrganizerService instance1 = EventOrganizerService.getInstance();
-        EventOrganizerService instance2 = EventOrganizerService.getInstance();
+        EventOrganizerService instance1 = EventOrganizerService.getInstance(MySqlRepository.getInstance());
+        EventOrganizerService instance2 = EventOrganizerService.getInstance(MySqlRepository.getInstance());
         assertSame(instance1, instance2, "getInstance should return the same instance (Singleton pattern)");
     }
 

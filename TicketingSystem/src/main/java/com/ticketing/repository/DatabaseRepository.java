@@ -9,42 +9,9 @@ import java.nio.file.Path;
 import java.sql.*;
 import java.util.Properties;
 
-public class DatabaseRepository implements AccountRepository, TicketingRepository {
-    private static DatabaseRepository instance;
-    private String url;
-    private String user;
-    private String password;
-    private Connection connection;
-
-    public static DatabaseRepository getInstance() {
-        if (instance == null) {
-            instance = new DatabaseRepository();
-        }
-        return instance;
-    }
-
-    private DatabaseRepository() {
-        try {
-            loadConfiguration();
-            this.connection = DriverManager.getConnection(url, user, password);
-            connection.setAutoCommit(false);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void loadConfiguration() {
-        try (InputStream input = ClassLoader.getSystemResourceAsStream("config.properties")) {
-            Properties prop = new Properties();
-            prop.load(input);
-            this.url = prop.getProperty("jdbc.url");
-            this.user = prop.getProperty("jdbc.user");
-            this.password = prop.getProperty("jdbc.password");
-        } catch (Exception ex) {
-            throw new RuntimeException("Failed to load configuration", ex);
-        }
-    }
+public abstract class DatabaseRepository implements AccountRepository, TicketingRepository {
+    protected String url;
+    protected Connection connection;
 
     @Override
     public boolean createAccount(Account account, String accountType) {
@@ -282,7 +249,6 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
     }
 
     public void clearDatabase() {
-        getInstance();
         try {
             String schema_sql = Files.readString(Path.of("src/main/resources/db/schema.sql"));
 
@@ -296,7 +262,6 @@ public class DatabaseRepository implements AccountRepository, TicketingRepositor
     }
 
     public void readSeed() {
-        getInstance();
         try {
             String schema_sql = Files.readString(Path.of("src/main/resources/db/seed.sql"));
 

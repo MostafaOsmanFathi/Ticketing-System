@@ -11,13 +11,13 @@ public class EventOrganizerService {
     private static TicketingRepository ticketingRepository;
     private static EventOrganizerService instance;
 
-    private EventOrganizerService() {
-        ticketingRepository = DatabaseRepository.getInstance();
+    private EventOrganizerService(DatabaseRepository databaseRepository) {
+        ticketingRepository = databaseRepository;
     }
 
-    public static EventOrganizerService getInstance() {
+    public static EventOrganizerService getInstance(DatabaseRepository databaseRepository) {
         if (instance == null) {
-            instance = new EventOrganizerService();
+            instance = new EventOrganizerService(databaseRepository);
         }
         return instance;
     }

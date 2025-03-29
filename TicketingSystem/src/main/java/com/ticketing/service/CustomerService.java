@@ -13,14 +13,14 @@ public class CustomerService {
     private static AccountRepository accountRepository;
     private static CustomerService instance;
 
-    private CustomerService() {
-        ticketingRepository = DatabaseRepository.getInstance();
-        accountRepository = DatabaseRepository.getInstance();
+    private CustomerService(DatabaseRepository databaseRepository) {
+        ticketingRepository = databaseRepository;
+        accountRepository = databaseRepository;
     }
 
-    public static CustomerService getInstance() {
+    public static CustomerService getInstance(DatabaseRepository databaseRepository) {
         if (instance == null) {
-            instance = new CustomerService();
+            instance = new CustomerService(databaseRepository);
         }
         return instance;
     }

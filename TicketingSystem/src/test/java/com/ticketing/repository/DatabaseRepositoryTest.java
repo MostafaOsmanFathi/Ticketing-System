@@ -16,7 +16,7 @@ class DatabaseRepositoryTest {
 
     @BeforeEach
     void getInstance() {
-        repository = DatabaseRepository.getInstance();
+        repository = MySqlRepository.getInstance();
         repository.clearDatabase();
     }
 
