@@ -12,7 +12,8 @@ public class SqlLiteDatabaseRepository extends DatabaseRepository {
     public static SqlLiteDatabaseRepository getInstance() {
         if (instance == null) {
             instance = new SqlLiteDatabaseRepository();
-            instance.resetDatabase();
+            if (!fileExists("TicketingSystem.db"))
+                instance.resetDatabase();
         }
         return instance;
     }
@@ -20,7 +21,8 @@ public class SqlLiteDatabaseRepository extends DatabaseRepository {
     public static SqlLiteDatabaseRepository getInstance(String filePath) {
         if (instance == null) {
             instance = new SqlLiteDatabaseRepository(filePath);
-            instance.resetDatabase();
+            if (!fileExists(filePath))
+                instance.resetDatabase();
         }
         return instance;
     }
@@ -47,5 +49,9 @@ public class SqlLiteDatabaseRepository extends DatabaseRepository {
         }
     }
 
+    public static boolean fileExists(String filePath) {
+        File file = new File(filePath);
+        return file.exists();
+    }
 
 }
