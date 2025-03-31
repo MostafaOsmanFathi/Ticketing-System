@@ -2,8 +2,6 @@ package com.ticketing.model;
 
 import com.ticketing.util.IdGenerator;
 
-import java.time.LocalDate;
-
 public class TicketType {
     private final int eventId;
     private final int ticketTypeId;
@@ -31,7 +29,7 @@ public class TicketType {
             throw new IllegalStateException("There no more tickets");
         }
         decreaseNumberOfTicket();
-        return new CustomerTicket(idGenerator.getTicketId(), customerId, ticketTypeId, eventId);
+        return new CustomerTicket(idGenerator.getNextId(), customerId, ticketTypeId, eventId);
     }
 
     public int getEventOrgnizerId() {

@@ -1,7 +1,9 @@
 package com.ticketing.view;
 
+import com.ticketing.enums.AccountType;
 import com.ticketing.repository.DatabaseRepository;
 import com.ticketing.repository.MySqlRepository;
+import com.ticketing.service.AccountService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,6 +62,26 @@ public class LoginPage extends BaseWindow {
             new MainMenu(databaseRepository);
         });
 
+        loginButton.addActionListener(e -> {
+            AccountService accountService = new AccountService(databaseRepository);
+            char[] passwordChars = passwordField.getPassword(); // Get password as char[]
+            String password = new String(passwordChars);
+
+            if (accountService.login(email.getText(), password)) {
+                JOptionPane.showMessageDialog(null, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                AccountType accountType = databaseRepository.getAccountType(accountService.getAccount().getAccountId());
+                if (accountType.equals(AccountType.Customer)) {
+                    new CustomerServicesPage(databaseRepository, accountService);
+                } else if (accountType.equals(AccountType.EventOrganizer)) {
+                    new EventOrganizerServicesPage(databaseRepository, accountService);
+                } else {
+                    accountService.logout();
+                    JOptionPane.showMessageDialog(null, "Login failed!", "Failed", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Login failed!", "Failed", JOptionPane.ERROR_MESSAGE);
+            }
+        });
         // Refresh UI
         revalidate();
         repaint();

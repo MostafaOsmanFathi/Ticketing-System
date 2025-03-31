@@ -7,7 +7,7 @@ public class IdGenerator {
         this.IdCounter = 0;
     }
 
-    public int getTicketId() {
+    public int getNextId() {
         IdCounter++;
         return IdCounter;
     }

@@ -6,13 +6,14 @@ import com.ticketing.model.Customer;
 import com.ticketing.model.EventOrganizer;
 import com.ticketing.repository.AccountRepository;
 import com.ticketing.repository.DatabaseRepository;
+import com.ticketing.util.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AccountService {
     private Account account;
-
+    private static IdGenerator idGenerator = new IdGenerator();
     private int defaultPaymentIdx;
     private List<PaymentInterface> payments;
 
@@ -46,8 +47,9 @@ public class AccountService {
         return true;
     }
 
-    public boolean register(AccountType accountType, int accountId, String name, String email, String password) {
-        Account account = new Account(accountId, name, email, password);
+    public boolean register(AccountType accountType, String name, String email, String password) {
+
+        Account account = new Account(idGenerator.getNextId(), name, email, password);
         if (accountType == AccountType.Customer) {
             return accountRepository.createCustomerAccount(account);
         } else {
