@@ -4,14 +4,47 @@ import com.ticketing.repository.DatabaseRepository;
 import com.ticketing.service.AccountService;
 import com.ticketing.service.EventOrganizerService;
 
-public class EventOrganizerServicesPage {
+import javax.swing.*;
+import java.awt.*;
+
+public class EventOrganizerServicesPage extends BaseWindow {
     AccountService accountService;
     EventOrganizerService eventOrganizerService;
     DatabaseRepository databaseRepository;
 
-    EventOrganizerServicesPage(DatabaseRepository databaseRepository, AccountService accountService) {
+    public EventOrganizerServicesPage(DatabaseRepository databaseRepository, AccountService accountService) {
+        super("Event Organizer Services");
         this.databaseRepository = databaseRepository;
         this.accountService = accountService;
         this.eventOrganizerService = EventOrganizerService.getInstance(databaseRepository);
+
+        // Get main panel
+        JPanel mainPanel = (JPanel) getContentPane().getComponent(0);
+        mainPanel.setLayout(new BorderLayout());
+
+        // Title label
+        JLabel titleLabel = new JLabel("Event Organizer Services", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+
+        // Button panel
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 1, 10, 10));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+
+        JButton accountServicesButton = new JButton("Account Services");
+        JButton createEventButton = new JButton("Create Event");
+        JButton browseEventsButton = new JButton("Browse My Events");
+
+        buttonPanel.add(accountServicesButton);
+        buttonPanel.add(createEventButton);
+        buttonPanel.add(browseEventsButton);
+
+        // Add components to main panel
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+        mainPanel.add(buttonPanel, BorderLayout.CENTER);
+
+        // Refresh UI
+        revalidate();
+        repaint();
     }
 }

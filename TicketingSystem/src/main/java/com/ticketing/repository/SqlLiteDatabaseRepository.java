@@ -1,8 +1,7 @@
 package com.ticketing.repository;
 
 import java.io.File;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class SqlLiteDatabaseRepository extends DatabaseRepository {
     private static SqlLiteDatabaseRepository instance;
@@ -12,8 +11,7 @@ public class SqlLiteDatabaseRepository extends DatabaseRepository {
     public static SqlLiteDatabaseRepository getInstance() {
         if (instance == null) {
             instance = new SqlLiteDatabaseRepository();
-            if (!fileExists("TicketingSystem.db"))
-                instance.resetDatabase();
+            checkAndInitializeDatabase(instance.connection);
         }
         return instance;
     }
@@ -54,4 +52,17 @@ public class SqlLiteDatabaseRepository extends DatabaseRepository {
         return file.exists();
     }
 
+    public static void checkAndInitializeDatabase(Connection conn) {
+        String query = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'";
+
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            if (!rs.next()) { // If no table exists, call your function
+                instance.resetDatabase(); // Replace this with your function
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
