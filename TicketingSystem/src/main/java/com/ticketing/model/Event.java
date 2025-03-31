@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Event {
-    private final int eventId;
-    private final int eventOrganizerId;
+    private  int eventId;
+    private  int eventOrganizerId;
     private String eventName;
     private String eventType;
     private String eventDescription;
@@ -61,5 +61,13 @@ public class Event {
 
     public int getEventId() {
         return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public void setEventOrganizerId(int eventOrganizerId) {
+        this.eventOrganizerId = eventOrganizerId;
     }
 }

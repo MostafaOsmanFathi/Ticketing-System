@@ -2,6 +2,7 @@ package com.ticketing.repository;
 
 import com.ticketing.enums.AccountType;
 import com.ticketing.model.Account;
+import com.ticketing.model.EventOrganizer;
 
 public interface AccountRepository {
     boolean createAccount(Account account, String accountType);
@@ -27,7 +28,7 @@ public interface AccountRepository {
         return withdrawAccountById(account.getAccountId(), amount);
     }
 
-    default boolean createEventOrganizerAccount(Account account) {
+    default boolean createEventOrganizerAccount(EventOrganizer account) {
         return createAccount(account, "EventOrganizer");
     }
 

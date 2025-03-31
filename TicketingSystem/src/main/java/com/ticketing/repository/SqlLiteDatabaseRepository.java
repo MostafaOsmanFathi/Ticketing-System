@@ -8,23 +8,6 @@ public class SqlLiteDatabaseRepository extends DatabaseRepository {
     private String user;
     private String password;
 
-    public static SqlLiteDatabaseRepository getInstance() {
-        if (instance == null) {
-            instance = new SqlLiteDatabaseRepository();
-            checkAndInitializeDatabase(instance.connection);
-        }
-        return instance;
-    }
-
-    public static SqlLiteDatabaseRepository getInstance(String filePath) {
-        if (instance == null) {
-            instance = new SqlLiteDatabaseRepository(filePath);
-            if (!fileExists(filePath))
-                instance.resetDatabase();
-        }
-        return instance;
-    }
-
     private SqlLiteDatabaseRepository() {
         super("sqliteSchema.sql");
         try {
@@ -45,6 +28,23 @@ public class SqlLiteDatabaseRepository extends DatabaseRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static SqlLiteDatabaseRepository getInstance() {
+        if (instance == null) {
+            instance = new SqlLiteDatabaseRepository();
+            checkAndInitializeDatabase(instance.connection);
+        }
+        return instance;
+    }
+
+    public static SqlLiteDatabaseRepository getInstance(String filePath) {
+        if (instance == null) {
+            instance = new SqlLiteDatabaseRepository(filePath);
+            if (!fileExists(filePath))
+                instance.resetDatabase();
+        }
+        return instance;
     }
 
     public static boolean fileExists(String filePath) {

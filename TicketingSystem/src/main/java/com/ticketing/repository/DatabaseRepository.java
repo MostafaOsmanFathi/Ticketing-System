@@ -3,7 +3,7 @@ package com.ticketing.repository;
 import com.ticketing.enums.AccountType;
 import com.ticketing.model.*;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
@@ -19,22 +19,51 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
 
     @Override
     public boolean createAccount(Account account, String accountType) {
-        String insertAccountSQL = "INSERT INTO Account (idAccount, name, email, password, balance) VALUES (?, ?, ?, ?, ?)";
-        String insertRoleSQL = accountType.equalsIgnoreCase("Customer") ? "INSERT INTO Customer (idCustomer, Account_idAccount) VALUES (?, ?)" : "INSERT INTO EventOrganizer (idEventOrganizer, Account_idAccount) VALUES (?, ?)";
+        String insertAccountSQL = "INSERT INTO Account (name, email, password, balance) VALUES (?, ?, ?, ?)";
+        String insertRoleSQL = accountType.equalsIgnoreCase("Customer")
+                ? "INSERT INTO Customer (Account_idAccount) VALUES (?)"
+                : "INSERT INTO EventOrganizer (Account_idAccount) VALUES (?)";
 
-        try (PreparedStatement stmt = connection.prepareStatement(insertAccountSQL); PreparedStatement stmtRole = connection.prepareStatement(insertRoleSQL)) {
+        try (PreparedStatement stmt = connection.prepareStatement(insertAccountSQL, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement stmtRole = connection.prepareStatement(insertRoleSQL, Statement.RETURN_GENERATED_KEYS)) {
+
             connection.setAutoCommit(false);
 
-            stmt.setInt(1, account.getAccountId());
-            stmt.setString(2, account.getUserName());
-            stmt.setString(3, account.getEmail());
-            stmt.setString(4, account.getPassword());
-            stmt.setDouble(5, account.getWalletBalance());
+            // Insert into Account table
+            stmt.setString(1, account.getUserName());
+            stmt.setString(2, account.getEmail());
+            stmt.setString(3, account.getPassword());
+            stmt.setDouble(4, account.getWalletBalance());
             stmt.executeUpdate();
 
-            stmtRole.setInt(1, account.getAccountId());
-            stmtRole.setInt(2, account.getAccountId());
+            // Retrieve the generated account ID
+            int accountId;
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    accountId = generatedKeys.getInt(1); // Get the auto-generated primary key
+                } else {
+                    throw new SQLException("Creating account failed, no ID obtained.");
+                }
+            }
+
+            account.setAccountId(accountId);
+
+            stmtRole.setInt(1, accountId);
             stmtRole.executeUpdate();
+
+            int customerOrEventOrgId = -1;
+            try (ResultSet generatedKeysRole = stmtRole.getGeneratedKeys()) {
+                if (generatedKeysRole.next()) {
+                    customerOrEventOrgId = generatedKeysRole.getInt(1); // Get the auto-generated primary key of the second insert
+                    if (account instanceof Customer customer) {
+                        customer.setCustomerId(customerOrEventOrgId);
+                    } else if (account instanceof EventOrganizer eventOrganizer) {
+                        eventOrganizer.setEventOrganizerId(customerOrEventOrgId);
+                    }
+                } else {
+                    throw new SQLException("Creating role failed, no ID obtained.");
+                }
+            }
 
             connection.commit();
             return true;
@@ -149,21 +178,31 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
     }
 
     public boolean createEvent(EventOrganizer eventOrganizer, Event event) {
-        String query = "INSERT INTO Event (idEvent, eventName, eventType, eventDescription, EventOrganizer_idEventOrganizer) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, event.getEventId());
-            stmt.setString(2, event.getEventName());
-            stmt.setString(3, event.getEventType());
-            stmt.setString(4, event.getEventDescription());
-            stmt.setInt(5, eventOrganizer.getEventOrganizerId());
-            boolean effectedRows = stmt.executeUpdate() > 0;
+        String query = "INSERT INTO Event (eventName, eventType, eventDescription, EventOrganizer_idEventOrganizer) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, event.getEventName());
+            stmt.setString(2, event.getEventType());
+            stmt.setString(3, event.getEventDescription());
+            stmt.setInt(4, eventOrganizer.getEventOrganizerId());
+
+            boolean affectedRows = stmt.executeUpdate() > 0;
+
+            // Retrieve the generated event ID
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    event.setEventId(generatedKeys.getInt(1)); // Update event object with generated ID
+                }
+            }
+
             connection.commit();
-            return effectedRows;
+            return affectedRows;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
 
     public Event getEvent(int eventOrganizerId, int eventId) {
         String query = "SELECT * FROM Event WHERE idEvent = ? AND EventOrganizer_idEventOrganizer = ?";
@@ -181,15 +220,23 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
     }
 
     public boolean createTicketType(Event event, TicketType ticketType) {
-        String sql = "INSERT INTO TicketType " + "(idTicketType, ticketPrice, ticketName, numberOfTickets, Event_idEvent) " + "VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, ticketType.getTicketTypeId());
-            ps.setDouble(2, ticketType.getTicketPrice());
-            ps.setString(3, ticketType.getTicketName());
-            ps.setInt(4, ticketType.getNumberOfTickets());
-            ps.setInt(5, event.getEventId());
+        String sql = "INSERT INTO TicketType (ticketPrice, ticketName, numberOfTickets, Event_idEvent) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setDouble(1, ticketType.getTicketPrice());
+            ps.setString(2, ticketType.getTicketName());
+            ps.setInt(3, ticketType.getNumberOfTickets());
+            ps.setInt(4, event.getEventId());
 
             int rowsAffected = ps.executeUpdate();
+
+            // Retrieve the generated ticket ID
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    ticketType.setTicketTypeId(generatedKeys.getInt(1)); // Set the generated ID
+                }
+            }
+
             connection.commit();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -197,6 +244,7 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
             return false;
         }
     }
+
 
     public TicketType getTicketType(int eventId, int ticketTypeId) {
         String sql = "SELECT * FROM TicketType WHERE Event_idEvent = ? AND idTicketType = ?";
@@ -237,13 +285,21 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
     }
 
     public boolean addTicketToCustomer(Customer customer, CustomerTicket customerTicket) {
-        String sql = "INSERT INTO CustomerTicket " + "(idCustomerTicket, Customer_idCustomer, TicketType_idTicketType) " + "VALUES (?, ?, ?)";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, customerTicket.getTicketId());
-            ps.setInt(2, customer.getCustomerId());
-            ps.setInt(3, customerTicket.getTicketTypeId());
+        String sql = "INSERT INTO CustomerTicket (Customer_idCustomer, TicketType_idTicketType) VALUES (?, ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, customer.getCustomerId());
+            ps.setInt(2, customerTicket.getTicketTypeId());
 
             int rowsAffected = ps.executeUpdate();
+
+            // Retrieve the generated ticket ID
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    customerTicket.setTicketId(generatedKeys.getInt(1)); // Store generated ID in the object
+                }
+            }
+
             connection.commit();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -251,6 +307,7 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
             return false;
         }
     }
+
 
     public void resetDatabase() {
         try {

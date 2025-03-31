@@ -1,13 +1,7 @@
 package com.ticketing.model;
 
-import com.ticketing.service.PaymentInterface;
-import com.ticketing.service.sudoPayment;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Account {
-    private final int accountId;
+    private int accountId;
     private String userName;
     private String email;
     private String password;
@@ -81,5 +75,9 @@ public class Account {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 }

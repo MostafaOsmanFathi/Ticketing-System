@@ -1,14 +1,10 @@
 package com.ticketing.model;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 public class CustomerTicket {
-    private final int ticketId;
-    private final int ticketTypeId;
-    private final int customerId;
-    private final int eventId;
+    private int ticketId;
+    private int ticketTypeId;
+    private int customerId;
+    private int eventId;
 
 
     public int getTicketId() {
@@ -32,5 +28,21 @@ public class CustomerTicket {
 
     public int getEventId() {
         return eventId;
+    }
+
+    public void setTicketId(int ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    public void setTicketTypeId(int ticketTypeId) {
+        this.ticketTypeId = ticketTypeId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 }

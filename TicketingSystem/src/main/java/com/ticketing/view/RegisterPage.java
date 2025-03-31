@@ -103,7 +103,7 @@ public class RegisterPage extends BaseWindow {
             } else {
                 accountType = AccountType.EventOrganizer;
             }
-            if (accountService.register(accountType, username, email, password)) {
+            if (accountService.register(accountType,1 ,username, email, password)) {
                 JOptionPane.showMessageDialog(null, "Registration successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
                 new MainMenu(databaseRepository);

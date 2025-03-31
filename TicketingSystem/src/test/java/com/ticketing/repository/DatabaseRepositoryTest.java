@@ -46,7 +46,7 @@ class DatabaseRepositoryTest {
         repository.createAccount(account, "Customer");
         Account result = repository.getAccount("user2@example.com", "pass2");
         assertNotNull(result);
-        assertEquals(1002, result.getAccountId());
+        assertEquals(account.getAccountId(), result.getAccountId());
     }
 
     @ParameterizedTest
@@ -55,7 +55,7 @@ class DatabaseRepositoryTest {
         repository.resetDatabase();
         Account account = new Account(1003, "User3", "user3@example.com", "pass3");
         repository.createAccount(account, "Customer");
-        boolean depositResult = repository.depositToAccountByAccountId(1003, 50.0);
+        boolean depositResult = repository.depositToAccountByAccountId(account.getAccountId(), 50.0);
         assertTrue(depositResult);
         Account updated = repository.getAccount("user3@example.com", "pass3");
         assertEquals(50.0, updated.getWalletBalance());
@@ -67,8 +67,9 @@ class DatabaseRepositoryTest {
         repository.resetDatabase();
         Account account = new Account(1004, "User4", "user4@example.com", "pass4");
         repository.createAccount(account, "Customer");
-        repository.depositToAccountByAccountId(1004, 100.0);
-        boolean withdrawResult = repository.withdrawAccountById(1004, 40.0);
+
+        repository.depositToAccountByAccountId(account.getAccountId(), 100.0);
+        boolean withdrawResult = repository.withdrawAccountById(account.getAccountId(), 40.0);
         assertTrue(withdrawResult);
         Account updated = repository.getAccount("user4@example.com", "pass4");
         assertEquals(60.0, updated.getWalletBalance());

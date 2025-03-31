@@ -1,12 +1,9 @@
 package com.ticketing.model;
 
-import com.ticketing.util.IdGenerator;
-
 public class TicketType {
-    private final int eventId;
-    private final int ticketTypeId;
-    private final int eventOrgnizerId;
-    private final IdGenerator idGenerator;
+    private int eventId;
+    private int ticketTypeId;
+    private int eventOrgnizerId;
     private double ticketPrice;
     private int numberOfTickets;
     private String ticketType;
@@ -20,7 +17,6 @@ public class TicketType {
         this.numberOfTickets = Math.max(numberOfTickets, 0);
         this.ticketType = ticketType;
         this.ticketName = ticketName;
-        this.idGenerator = new IdGenerator();
         this.eventOrgnizerId = eventOrgnizerId;
     }
 
@@ -29,7 +25,7 @@ public class TicketType {
             throw new IllegalStateException("There no more tickets");
         }
         decreaseNumberOfTicket();
-        return new CustomerTicket(idGenerator.getNextId(), customerId, ticketTypeId, eventId);
+        return new CustomerTicket(0, customerId, ticketTypeId, eventId);
     }
 
     public int getEventOrgnizerId() {
@@ -82,5 +78,22 @@ public class TicketType {
 
     public int getNumberOfTickets() {
         return numberOfTickets;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public void setTicketTypeId(int ticketTypeId) {
+        this.ticketTypeId = ticketTypeId;
+    }
+
+    public void setEventOrgnizerId(int eventOrgnizerId) {
+        this.eventOrgnizerId = eventOrgnizerId;
+    }
+
+
+    public void setNumberOfTickets(int numberOfTickets) {
+        this.numberOfTickets = numberOfTickets;
     }
 }

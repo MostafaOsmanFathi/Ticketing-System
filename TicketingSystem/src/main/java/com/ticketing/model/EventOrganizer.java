@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EventOrganizer extends Account {
+    private int eventOrganizerId;
     private final List<Event> events;
-
-    private final int eventOrganizerId;
 
     public EventOrganizer(int accountId, int eventOrganizerId, String name, String email, String password) {
         super(accountId, name, email, password);
@@ -26,5 +25,9 @@ public class EventOrganizer extends Account {
 
     public boolean addEvent(Event event) {
         return events.add(event);
+    }
+
+    public void setEventOrganizerId(int eventOrganizerId) {
+        this.eventOrganizerId = eventOrganizerId;
     }
 }

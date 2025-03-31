@@ -12,136 +12,99 @@ CREATE TABLE IF NOT EXISTS Account
 (
     idAccount
         INTEGER
-        PRIMARY
-            KEY,
+        PRIMARY KEY AUTOINCREMENT,
     name
         TEXT,
     email
         TEXT
         UNIQUE
-        NOT
-            NULL,
+        NOT NULL,
     password
         TEXT
-        NOT
-            NULL,
+        NOT NULL,
     balance
         REAL
-        DEFAULT
-            0.0
+        DEFAULT 0.0
 );
 
 CREATE TABLE IF NOT EXISTS Customer
 (
     idCustomer
         INTEGER
-        PRIMARY
-            KEY,
+        PRIMARY KEY AUTOINCREMENT,
     Account_idAccount
         INTEGER
-        NOT
-            NULL,
-    FOREIGN
-        KEY
-        (
-         Account_idAccount
-            ) REFERENCES Account
-        (
-         idAccount
-            ) ON DELETE CASCADE
+        NOT NULL,
+    FOREIGN KEY
+        (Account_idAccount) REFERENCES Account
+        (idAccount)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS EventOrganizer
 (
     idEventOrganizer
         INTEGER
-        PRIMARY
-            KEY,
+        PRIMARY KEY AUTOINCREMENT,
     Account_idAccount
         INTEGER
-        NOT
-            NULL,
-    FOREIGN
-        KEY
-        (
-         Account_idAccount
-            ) REFERENCES Account
-        (
-         idAccount
-            ) ON DELETE CASCADE
+        NOT NULL,
+    FOREIGN KEY
+        (Account_idAccount) REFERENCES Account
+        (idAccount)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Event
 (
     idEvent
         INTEGER
-        PRIMARY
-            KEY,
+        PRIMARY KEY AUTOINCREMENT,
     eventName
         TEXT
-        NOT
-            NULL,
+        NOT NULL,
     eventType
         TEXT,
     eventDescription
         TEXT,
     EventOrganizer_idEventOrganizer
         INTEGER
-        NOT
-            NULL,
-    FOREIGN
-        KEY
-        (
-         EventOrganizer_idEventOrganizer
-            ) REFERENCES EventOrganizer
-        (
-         idEventOrganizer
-            ) ON DELETE CASCADE
+        NOT NULL,
+    FOREIGN KEY
+        (EventOrganizer_idEventOrganizer) REFERENCES EventOrganizer
+        (idEventOrganizer)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS TicketType
 (
     idTicketType
         INTEGER
-        PRIMARY
-            KEY,
+        PRIMARY KEY AUTOINCREMENT,
     ticketPrice
         REAL
-        NOT
-            NULL,
+        NOT NULL,
     ticketName
         TEXT
-        NOT
-            NULL,
+        NOT NULL,
     expirationDate
         TEXT,
     numberOfTickets
         INTEGER
-        NOT
-            NULL,
+        NOT NULL,
     Event_idEvent
         INTEGER
-        NOT
-            NULL,
+        NOT NULL,
     EventOrganizer_id
         INTEGER
-        NOT
-            NULL,
-    FOREIGN
-        KEY
-        (
-         Event_idEvent
-            ) REFERENCES Event
-        (
-         idEvent
-            ) ON DELETE CASCADE,
+        NOT NULL,
     FOREIGN KEY
-        (
-         EventOrganizer_id
-            ) REFERENCES EventOrganizer
-        (
-         idEventOrganizer
-            )
+        (Event_idEvent) REFERENCES Event
+        (idEvent)
+        ON DELETE CASCADE,
+    FOREIGN KEY
+        (EventOrganizer_id) REFERENCES EventOrganizer
+        (idEventOrganizer)
         ON DELETE CASCADE
 );
 
@@ -149,30 +112,19 @@ CREATE TABLE IF NOT EXISTS CustomerTicket
 (
     idCustomerTicket
         INTEGER
-        PRIMARY
-            KEY,
+        PRIMARY KEY AUTOINCREMENT,
     Customer_idCustomer
         INTEGER
-        NOT
-            NULL,
+        NOT NULL,
     TicketType_idTicketType
         INTEGER
-        NOT
-            NULL,
-    FOREIGN
-        KEY
-        (
-         Customer_idCustomer
-            ) REFERENCES Customer
-        (
-         idCustomer
-            ) ON DELETE CASCADE,
+        NOT NULL,
     FOREIGN KEY
-        (
-         TicketType_idTicketType
-            ) REFERENCES TicketType
-        (
-         idTicketType
-            )
+        (Customer_idCustomer) REFERENCES Customer
+        (idCustomer)
+        ON DELETE CASCADE,
+    FOREIGN KEY
+        (TicketType_idTicketType) REFERENCES TicketType
+        (idTicketType)
         ON DELETE CASCADE
 );

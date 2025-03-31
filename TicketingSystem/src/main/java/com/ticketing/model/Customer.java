@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Customer extends Account {
-    private final int customerId;
+    private int customerId;
     private final List<CustomerTicket> customerTickets;
 
     public Customer(int accountId, int customerId, String name, String email, String password) {
@@ -27,4 +27,7 @@ public class Customer extends Account {
         return customerTickets.add(customerTicket);
     }
 
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
 }
