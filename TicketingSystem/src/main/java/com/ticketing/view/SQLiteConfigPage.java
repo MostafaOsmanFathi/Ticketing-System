@@ -1,6 +1,7 @@
 package com.ticketing.view;
 
 import com.ticketing.repository.DatabaseRepository;
+import com.ticketing.repository.MySqlRepository;
 import com.ticketing.repository.SqlLiteDatabaseRepository;
 
 import javax.swing.*;
@@ -33,6 +34,12 @@ public class SQLiteConfigPage extends BaseWindow {
         JButton connectButton = new JButton("Connect");
         buttonPanel.add(connectButton);
 
+        JButton backButton = new JButton("back");
+        buttonPanel.add(backButton);
+
+        JButton defaultButton = new JButton("Default Database");
+        buttonPanel.add(defaultButton);
+
         // Add components
         mainPanel.add(titleLabel, BorderLayout.NORTH);
         mainPanel.add(filePanel, BorderLayout.CENTER);
@@ -47,6 +54,12 @@ public class SQLiteConfigPage extends BaseWindow {
                 filePathField.setText(selectedFile.getAbsolutePath());
             }
         });
+        defaultButton.addActionListener(e -> {
+            DatabaseRepository databaseRepository = SqlLiteDatabaseRepository.getInstance();
+            dispose();
+            new MainMenu(databaseRepository);
+
+        });
 
         // Connect Button Action
         connectButton.addActionListener(e -> {
@@ -54,6 +67,11 @@ public class SQLiteConfigPage extends BaseWindow {
             DatabaseRepository databaseRepository = SqlLiteDatabaseRepository.getInstance(connectionInfo);
             dispose();
             new MainMenu(databaseRepository);
+        });
+
+        backButton.addActionListener(e -> {
+            dispose();
+            new DatabaseSelectionPage();
         });
 
         revalidate();

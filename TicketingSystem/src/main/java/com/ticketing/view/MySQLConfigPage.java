@@ -42,7 +42,10 @@ public class MySQLConfigPage extends BaseWindow {
         // Button Panel
         JPanel buttonPanel = new JPanel();
         JButton saveButton = new JButton("Connect");
+        JButton backButton = new JButton("back");
+
         buttonPanel.add(saveButton);
+        buttonPanel.add(backButton);
 
         // Add components
         mainPanel.add(titleLabel, BorderLayout.NORTH);
@@ -54,6 +57,12 @@ public class MySQLConfigPage extends BaseWindow {
             dispose();
             DatabaseRepository databaseRepository = MySqlRepository.getInstance(hostField.getText(), Integer.parseInt(portField.getText()), userField.getText(), passField.getText());
             new MainMenu(databaseRepository);
+        });
+
+        //back button
+        backButton.addActionListener(e -> {
+            dispose();
+            new DatabaseSelectionPage();
         });
 
         revalidate();
