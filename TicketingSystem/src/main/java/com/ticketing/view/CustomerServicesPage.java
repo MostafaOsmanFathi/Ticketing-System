@@ -31,6 +31,11 @@ public class CustomerServicesPage extends BaseWindow {
         JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 10, 10));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
+        JButton accountServicesButton = new JButton("Account Services");
+        accountServicesButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        buttonPanel.add(accountServicesButton);
+
+
         // Browse Events Button
         JButton browseEventsButton = new JButton("Browse Events");
         browseEventsButton.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -50,6 +55,10 @@ public class CustomerServicesPage extends BaseWindow {
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
         mainPanel.add(backButton, BorderLayout.SOUTH);
 
+        accountServicesButton.addActionListener(e -> {
+            dispose();
+            new AccountServicesPage(databaseRepository, accountService, this);
+        });
         // Event Listeners
         browseEventsButton.addActionListener(e -> {
             //           TODO Implement BrowseEventsPage

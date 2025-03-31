@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class DatabaseRepository implements AccountRepository, TicketingRepository {
     protected String url;
@@ -20,12 +22,9 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
     @Override
     public boolean createAccount(Account account, String accountType) {
         String insertAccountSQL = "INSERT INTO Account (name, email, password, balance) VALUES (?, ?, ?, ?)";
-        String insertRoleSQL = accountType.equalsIgnoreCase("Customer")
-                ? "INSERT INTO Customer (Account_idAccount) VALUES (?)"
-                : "INSERT INTO EventOrganizer (Account_idAccount) VALUES (?)";
+        String insertRoleSQL = accountType.equalsIgnoreCase("Customer") ? "INSERT INTO Customer (Account_idAccount) VALUES (?)" : "INSERT INTO EventOrganizer (Account_idAccount) VALUES (?)";
 
-        try (PreparedStatement stmt = connection.prepareStatement(insertAccountSQL, Statement.RETURN_GENERATED_KEYS);
-             PreparedStatement stmtRole = connection.prepareStatement(insertRoleSQL, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = connection.prepareStatement(insertAccountSQL, Statement.RETURN_GENERATED_KEYS); PreparedStatement stmtRole = connection.prepareStatement(insertRoleSQL, Statement.RETURN_GENERATED_KEYS)) {
 
             connection.setAutoCommit(false);
 
@@ -90,8 +89,7 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
             if (rs.next()) {
                 Account account = new Account(rs.getInt("idAccount"), rs.getString("name"), rs.getString("email"), rs.getString("password"));
                 double walletBalance = rs.getDouble("balance");
-                if (walletBalance != 0)
-                    account.deposit(walletBalance);
+                if (walletBalance != 0) account.deposit(walletBalance);
                 return account;
             }
         } catch (SQLException e) {
@@ -373,6 +371,111 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
         }
     }
 
+    public List<Event> getEventsForEventOrganizer(int eventOrganizerId) {
+        List<Event> events = new ArrayList<>();
+        String query = "SELECT * FROM Event WHERE EventOrganizer_idEventOrganizer = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, eventOrganizerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Event event = new Event(resultSet.getInt("idEvent"), resultSet.getInt("EventOrganizer_idEventOrganizer"), resultSet.getString("eventName"), resultSet.getString("eventType"), resultSet.getString("eventDescription"));
+
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return events;
+    }
+
+    public List<Event> getAllEvents() {
+        List<Event> events = new ArrayList<>();
+        String query = "SELECT * FROM Event";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Event event = new Event(resultSet.getInt("idEvent"), resultSet.getInt("EventOrganizer_idEventOrganizer"), resultSet.getString("eventName"), resultSet.getString("eventType"), resultSet.getString("eventDescription"));
+
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return events;
+    }
+
+    public List<TicketType> getTicketTypesByEventId(int eventId) {
+        List<TicketType> ticketTypes = new ArrayList<>();
+        String query = "SELECT * FROM TicketType WHERE Event_idEvent = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, eventId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                TicketType ticketType = new TicketType(resultSet.getInt("Event_idEvent"), resultSet.getInt("EventOrganizer_id"), resultSet.getInt("idTicketType"), resultSet.getDouble("ticketPrice"), resultSet.getInt("numberOfTickets"), "", ""
+
+                );
+                ticketTypes.add(ticketType);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ticketTypes;
+    }
+
+    public List<TicketType> getAllTicketTypes() {
+        List<TicketType> ticketTypes = new ArrayList<>();
+        String query = "SELECT * FROM TicketType";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                TicketType ticketType = new TicketType(resultSet.getInt("Event_idEvent"), resultSet.getInt("EventOrganizer_id"), resultSet.getInt("idTicketType"), resultSet.getDouble("ticketPrice"), resultSet.getInt("numberOfTickets"), "", ""
+
+                );
+                ticketTypes.add(ticketType);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ticketTypes;
+    }
+
+    public List<CustomerTicket> getCustomerTicketsByCustomerId(int customerId) {
+        List<CustomerTicket> customerTickets = new ArrayList<>();
+
+        String query = "SELECT * FROM CustomerTicket JOIN TicketType ON CustomerTicket.TicketType_idTicketType = TicketType.idTicketType WHERE CustomerTicket.idCustomerTicket = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, customerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                CustomerTicket customerTicket = new CustomerTicket(
+                        resultSet.getInt("idCustomerTicket"),
+                        resultSet.getInt("Customer_idCustomer"),
+                        resultSet.getInt("TicketType_idTicketType"),
+                        resultSet.getInt("Event_idEvent")
+                );
+                customerTickets.add(customerTicket);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customerTickets;
+    }
+    
     public void commitChanges() throws SQLException {
         connection.commit();
     }

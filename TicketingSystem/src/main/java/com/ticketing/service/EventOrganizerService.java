@@ -22,17 +22,17 @@ public class EventOrganizerService {
         return instance;
     }
 
-    boolean addEvent(EventOrganizer eventOrganizer, Event event) {
+    public boolean addEvent(EventOrganizer eventOrganizer, Event event) {
         return ticketingRepository.createEvent(eventOrganizer, event)
                 && eventOrganizer.addEvent(event);
     }
 
-    boolean addTicketTypeToEvent(Event event, TicketType ticketType) {
+    public boolean addTicketTypeToEvent(Event event, TicketType ticketType) {
         return event.addTicketType(ticketType) &&
                 ticketingRepository.createTicketType(event, ticketType);
     }
 
-    TicketType getTicketTypeFromEvent(Event event, int ticketTypeId) {
+    public TicketType getTicketTypeFromEvent(Event event, int ticketTypeId) {
         return ticketingRepository.getTicketType(event.getEventId(), ticketTypeId);
     }
 }

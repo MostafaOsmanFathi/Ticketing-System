@@ -35,14 +35,36 @@ public class EventOrganizerServicesPage extends BaseWindow {
         JButton createEventButton = new JButton("Create Event");
         JButton browseEventsButton = new JButton("Browse My Events");
 
+        JButton logOutButton = new JButton("Log Out");
+        logOutButton.setFont(new Font("Arial", Font.PLAIN, 18));
+
+
         buttonPanel.add(accountServicesButton);
         buttonPanel.add(createEventButton);
         buttonPanel.add(browseEventsButton);
+        buttonPanel.add(logOutButton);
 
         // Add components to main panel
         mainPanel.add(titleLabel, BorderLayout.NORTH);
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
 
+        accountServicesButton.addActionListener(e -> {
+            new AccountServicesPage(databaseRepository, accountService, this);
+        });
+
+        createEventButton.addActionListener(e -> {
+            new CreateEventPage(accountService, databaseRepository);
+        });
+
+        browseEventsButton.addActionListener(e -> {
+            new BrowseEventPages(accountService, databaseRepository);
+        });
+
+        logOutButton.addActionListener(e -> {
+            dispose();
+            accountService.logout();
+            new LoginPage(databaseRepository);
+        });
         // Refresh UI
         revalidate();
         repaint();

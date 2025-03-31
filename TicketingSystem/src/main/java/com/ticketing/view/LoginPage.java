@@ -71,8 +71,10 @@ public class LoginPage extends BaseWindow {
                 JOptionPane.showMessageDialog(null, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 AccountType accountType = databaseRepository.getAccountType(accountService.getAccount().getAccountId());
                 if (accountType.equals(AccountType.Customer)) {
+                    dispose();
                     new CustomerServicesPage(databaseRepository, accountService);
                 } else if (accountType.equals(AccountType.EventOrganizer)) {
+                    dispose();
                     new EventOrganizerServicesPage(databaseRepository, accountService);
                 } else {
                     accountService.logout();

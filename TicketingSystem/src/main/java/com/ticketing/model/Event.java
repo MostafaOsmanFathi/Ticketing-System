@@ -70,4 +70,5 @@ public class Event {
     public void setEventOrganizerId(int eventOrganizerId) {
         this.eventOrganizerId = eventOrganizerId;
     }
+
 }
