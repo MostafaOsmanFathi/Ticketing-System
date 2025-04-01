@@ -2,7 +2,6 @@ package com.ticketing.view;
 
 import com.ticketing.repository.DatabaseRepository;
 import com.ticketing.repository.MySqlRepository;
-import com.ticketing.repository.SqlLiteDatabaseRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +42,9 @@ public class MySQLConfigPage extends BaseWindow {
         JPanel buttonPanel = new JPanel();
         JButton saveButton = new JButton("Connect");
         JButton backButton = new JButton("back");
+        JButton defaultButton = new JButton("Default Database");
 
+        buttonPanel.add(defaultButton);
         buttonPanel.add(saveButton);
         buttonPanel.add(backButton);
 
@@ -52,10 +53,12 @@ public class MySQLConfigPage extends BaseWindow {
         mainPanel.add(formPanel, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
+        char[] pass = passField.getPassword();
+        String passString = new String(pass);
         // Button Action
         saveButton.addActionListener(e -> {
             dispose();
-            DatabaseRepository databaseRepository = MySqlRepository.getInstance(hostField.getText(), Integer.parseInt(portField.getText()), userField.getText(), passField.getText());
+            DatabaseRepository databaseRepository = MySqlRepository.getInstance(hostField.getText(), Integer.parseInt(portField.getText()), userField.getText(), passString);
             new MainMenu(databaseRepository);
         });
 
@@ -63,6 +66,13 @@ public class MySQLConfigPage extends BaseWindow {
         backButton.addActionListener(e -> {
             dispose();
             new DatabaseSelectionPage();
+        });
+
+        defaultButton.addActionListener(e -> {
+            DatabaseRepository databaseRepository = MySqlRepository.getInstance();
+            dispose();
+            new MainMenu(databaseRepository);
+
         });
 
         revalidate();

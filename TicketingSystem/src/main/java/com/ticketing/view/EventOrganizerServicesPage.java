@@ -49,15 +49,18 @@ public class EventOrganizerServicesPage extends BaseWindow {
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
 
         accountServicesButton.addActionListener(e -> {
-            new AccountServicesPage(databaseRepository, accountService, this);
+            dispose();
+            new AccountServicesPage(databaseRepository, accountService);
         });
 
         createEventButton.addActionListener(e -> {
+            dispose();
             new CreateEventPage(accountService, databaseRepository);
         });
 
         browseEventsButton.addActionListener(e -> {
-            new BrowseEventPages(accountService, databaseRepository);
+            dispose();
+            new BrowseEventPage(accountService, databaseRepository);
         });
 
         logOutButton.addActionListener(e -> {

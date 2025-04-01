@@ -1,8 +1,8 @@
 package com.ticketing.view;
 
+import com.ticketing.model.Customer;
 import com.ticketing.repository.DatabaseRepository;
 import com.ticketing.service.AccountService;
-import com.ticketing.service.CustomerService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class AccountServicesPage extends BaseWindow {
     private JLabel balanceLabel;
     private JTextField amountField;
 
-    public AccountServicesPage(DatabaseRepository databaseRepository, AccountService accountService, Object cameFrom) {
+    public AccountServicesPage(DatabaseRepository databaseRepository, AccountService accountService) {
         super("Account Balance - Ticketing System");
         this.databaseRepository = databaseRepository;
         this.accountService = accountService;
@@ -90,12 +90,12 @@ public class AccountServicesPage extends BaseWindow {
         setBalance("" + accountService.getAccount().getWalletBalance());
         // Back Button Action
         backButton.addActionListener(e -> {
-            if (cameFrom instanceof CustomerService) {
+            dispose();
+            if (accountService.getAccount() instanceof Customer) {
                 new CustomerServicesPage(databaseRepository, accountService);
             } else {
                 new EventOrganizerServicesPage(databaseRepository, accountService);
             }
-            dispose();
         });
         depositButton.addActionListener(
                 e -> {

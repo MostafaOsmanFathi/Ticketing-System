@@ -37,9 +37,9 @@ public class CustomerServicesPage extends BaseWindow {
 
 
         // Browse Events Button
-        JButton browseEventsButton = new JButton("Browse Events");
-        browseEventsButton.setFont(new Font("Arial", Font.PLAIN, 18));
-        buttonPanel.add(browseEventsButton);
+        JButton browseMyTicketsButton = new JButton("Browse My Tickets");
+        browseMyTicketsButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        buttonPanel.add(browseMyTicketsButton);
 
         // Browse Tickets Button
         JButton browseTicketsButton = new JButton("Browse Tickets");
@@ -57,19 +57,17 @@ public class CustomerServicesPage extends BaseWindow {
 
         accountServicesButton.addActionListener(e -> {
             dispose();
-            new AccountServicesPage(databaseRepository, accountService, this);
+            new AccountServicesPage(databaseRepository, accountService);
         });
         // Event Listeners
-        browseEventsButton.addActionListener(e -> {
-            //           TODO Implement BrowseEventsPage
-//            dispose();
-//            new BrowseEventsPage(databaseRepository, accountService);
+        browseMyTicketsButton.addActionListener(e -> {
+            dispose();
+            new BrowseMyCustomerTicketsPage(databaseRepository, accountService);
         });
 
         browseTicketsButton.addActionListener(e -> {
-//            TODO Implement BrowseTicketsPage
-//            dispose();
-//            new BrowseTicketsPage(databaseRepository, accountService);
+            dispose();
+            new BrowseAllTicketTypesPage(databaseRepository, accountService);
         });
 
         backButton.addActionListener(e -> {
