@@ -26,7 +26,7 @@ public class CustomerService {
     }
 
 
-    boolean buyTicket(Customer customer, TicketType ticket) {
+    public boolean buyTicket(Customer customer, TicketType ticket) {
         if (customer.withdraw(ticket.getTicketPrice()) &&
                 accountRepository.withdraw(customer, ticket.getTicketPrice()) &&
                 accountRepository.depositToAccountByAccountId(ticket.getEventOrgnizerId(), ticket.getTicketPrice())) {
@@ -41,7 +41,7 @@ public class CustomerService {
         return false;
     }
 
-    boolean decreaseNumberOfTicket(TicketType ticket) {
+    public boolean decreaseNumberOfTicket(TicketType ticket) {
         return ticketingRepository.decreaseTicketType(ticket.getEventId(), ticket.getTicketTypeId());
     }
 

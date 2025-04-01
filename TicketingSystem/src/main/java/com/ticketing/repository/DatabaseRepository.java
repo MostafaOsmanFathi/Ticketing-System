@@ -218,13 +218,14 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
     }
 
     public boolean createTicketType(Event event, TicketType ticketType) {
-        String sql = "INSERT INTO TicketType (ticketPrice, ticketName, numberOfTickets, Event_idEvent) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO TicketType (ticketPrice, ticketName, numberOfTickets, Event_idEvent,EventOrganizer_id) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setDouble(1, ticketType.getTicketPrice());
             ps.setString(2, ticketType.getTicketName());
             ps.setInt(3, ticketType.getNumberOfTickets());
             ps.setInt(4, event.getEventId());
+            ps.setInt(5, event.getEventOrganizerId());
 
             int rowsAffected = ps.executeUpdate();
 
@@ -322,8 +323,7 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
 
     public void clearDatabase() {
         try {
-            String schema_sql = "DROP DATABASE TicketingSystem;";
-
+            String schema_sql = "DROP DATABASE IF EXISTS TicketingSystem;";
 
             executeSqlScript(schema_sql);
         } catch (SQLException e) {
@@ -419,7 +419,7 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                TicketType ticketType = new TicketType(resultSet.getInt("Event_idEvent"), resultSet.getInt("EventOrganizer_id"), resultSet.getInt("idTicketType"), resultSet.getDouble("ticketPrice"), resultSet.getInt("numberOfTickets"), "", ""
+                TicketType ticketType = new TicketType(resultSet.getInt("Event_idEvent"), resultSet.getInt("EventOrganizer_id"), resultSet.getInt("idTicketType"), resultSet.getDouble("ticketPrice"), resultSet.getInt("numberOfTickets"), "----", resultSet.getString("ticketName")
 
                 );
                 ticketTypes.add(ticketType);
@@ -475,7 +475,7 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
 
         return customerTickets;
     }
-    
+
     public void commitChanges() throws SQLException {
         connection.commit();
     }

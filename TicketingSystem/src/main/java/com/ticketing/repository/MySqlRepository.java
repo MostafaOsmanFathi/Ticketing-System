@@ -1,9 +1,7 @@
 package com.ticketing.repository;
 
 import java.io.InputStream;
-import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -15,7 +13,7 @@ public class MySqlRepository extends DatabaseRepository {
     public static MySqlRepository getInstance() {
         if (instance == null) {
             instance = new MySqlRepository();
-            instance.createDatabaseIfNotExists();
+            instance.resetDatabase();
         }
         return instance;
     }
@@ -23,7 +21,8 @@ public class MySqlRepository extends DatabaseRepository {
     public static MySqlRepository getInstance(String hostIP, int port, String user, String password) {
         if (instance == null) {
             instance = new MySqlRepository(hostIP, port, user, password);
-            instance.createDatabaseIfNotExists();
+//            instance.createDatabaseIfNotExists();
+            instance.resetDatabase();
         }
         return instance;
     }
