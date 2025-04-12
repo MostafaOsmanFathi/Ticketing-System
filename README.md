@@ -29,90 +29,83 @@ For project unit tests, see [Testing Guide](/TicketingSystem/src/test/java/com/t
 
 The project follows a **layered architecture**, organizing code into distinct layers for maintainability and scalability.
 
+### Source Code 
 ```
-TicketingSystem
-+---main
-|   +---java
-|   |   \---com
-|   |       \---ticketing
-|   |           |   Main.java
-|   |           |   
-|   |           +---Control
-|   |           +---enums
-|   |           |       AccountType.java
-|   |           |       
-|   |           +---model
-|   |           |       Account.java
-|   |           |       Customer.java
-|   |           |       CustomerTicket.java
-|   |           |       Event.java
-|   |           |       EventOrganizer.java
-|   |           |       TicketType.java
-|   |           |
-|   |           +---repository
-|   |           |       AccountRepository.java
-|   |           |       DatabaseRepository.java
-|   |           |       MySqlRepository.java
-|   |           |       SqlLiteDatabaseRepository.java
-|   |           |       TicketingRepository.java
-|   |           |
-|   |           +---service
-|   |           |       AccountService.java
-|   |           |       CustomerService.java
-|   |           |       EventOrganizerService.java
-|   |           |       PaymentInterface.java
-|   |           |       sudoPayment.java
-|   |           |
-|   |           \---view
-|   |                   AccountServicesPage.java
-|   |                   BaseWindow.java
-|   |                   BrowseAllTicketTypesPage.java
-|   |                   BrowseEventPage.java
-|   |                   BrowseMyCustomerTicketsPage.java
-|   |                   CreateEventPage.java
-|   |                   CreateTicketTypePage.java
-|   |                   CustomerServicesPage.java
-|   |                   DatabaseSelectionPage.java
-|   |                   EventOrganizerServicesPage.java
-|   |                   LoginPage.java
-|   |                   MainMenu.java
-|   |                   MySQLConfigPage.java
-|   |                   RegisterPage.java
-|   |                   ShowEventPage.java
-|   |                   SQLiteConfigPage.java
-|   |
-|   \---resources
-|       |   config.properties
-|       |
-|       +---db
-|       |       schema.sql
-|       |       seed.sql
-|       |       sqliteSchema.sql
-|       |
-|       \---META-INF
-|               MANIFEST.MF
-|
-\---test
-    \---java
-        \---com
-            \---ticketing
-                |   README.md
-                |
-                +---model
-                |       AccountTest.java
-                |       CustomerTest.java
-                |       CustomerTicketTest.java
-                |       EventOrganizerTest.java
-                |       EventTest.java
-                |       TicketTypeTest.java
-                |
-                +---repository
-                |       DatabaseRepositoryTest.java
-                |
-                \---service
-                        AccountServiceTest.java
-                        CustomerServiceTest.java
-                        EventOrganizerServiceTest.java
+src
+├── main
+│   ├── java/com/ticketing
+│   │   ├── Main.java
+│   │   ├── Control/
+│   │   ├── enums
+│   │   │   └── AccountType.java
+│   │   ├── model
+│   │   │   ├── Account.java
+│   │   │   ├── Customer.java
+│   │   │   ├── CustomerTicket.java
+│   │   │   ├── Event.java
+│   │   │   ├── EventOrganizer.java
+│   │   │   └── TicketType.java
+│   │   ├── repository
+│   │   │   ├── AccountRepository.java
+│   │   │   ├── DatabaseRepository.java
+│   │   │   ├── MySqlRepository.java
+│   │   │   ├── SqlLiteDatabaseRepository.java
+│   │   │   └── TicketingRepository.java
+│   │   ├── service
+│   │   │   ├── AccountService.java
+│   │   │   ├── CustomerService.java
+│   │   │   ├── EventOrganizerService.java
+│   │   │   ├── PaymentInterface.java
+│   │   │   └── sudoPayment.java
+│   │   └── view
+│   │       ├── AccountServicesPage.java
+│   │       ├── BaseWindow.java
+│   │       ├── BrowseAllTicketTypesPage.java
+│   │       ├── BrowseEventPage.java
+│   │       ├── BrowseMyCustomerTicketsPage.java
+│   │       ├── CreateEventPage.java
+│   │       ├── CreateTicketTypePage.java
+│   │       ├── CustomerServicesPage.java
+│   │       ├── DatabaseSelectionPage.java
+│   │       ├── EventOrganizerServicesPage.java
+│   │       ├── LoginPage.java
+│   │       ├── MainMenu.java
+│   │       ├── MySQLConfigPage.java
+│   │       ├── RegisterPage.java
+│   │       ├── ShowEventPage.java
+│   │       └── SQLiteConfigPage.java
+```
+
+### Unite Testing
+```
+test
+└── java/com/ticketing
+    ├── README.md
+    ├── model
+    │   ├── AccountTest.java
+    │   ├── CustomerTest.java
+    │   ├── CustomerTicketTest.java
+    │   ├── EventOrganizerTest.java
+    │   ├── EventTest.java
+    │   └── TicketTypeTest.java
+    ├── repository
+    │   └── DatabaseRepositoryTest.java
+    └── service
+        ├── AccountServiceTest.java
+        ├── CustomerServiceTest.java
+        └── EventOrganizerServiceTest.java
+```
+
+### Resources
+```
+resources
+├── config.properties
+├── db
+│   ├── schema.sql
+│   ├── seed.sql
+│   └── sqliteSchema.sql
+└── META-INF
+    └── MANIFEST.MF
 ```
 
 ## Setup
@@ -137,6 +130,10 @@ To run the **Ticketing System**:
     ```bash
     java -jar TicketingSystem.jar
     ```
+
+## Project Design and Architecture
+
+All design files, including ERD mappings and UML diagrams, can be found in the [architectureDesignFiles](/architectureDesignFiles) folder.
 
 ## License
 
