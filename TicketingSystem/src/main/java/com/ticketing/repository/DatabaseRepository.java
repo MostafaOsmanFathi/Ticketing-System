@@ -3,7 +3,10 @@ package com.ticketing.repository;
 import com.ticketing.enums.AccountType;
 import com.ticketing.model.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
@@ -310,12 +313,17 @@ public abstract class DatabaseRepository implements AccountRepository, Ticketing
 
     public void resetDatabase() {
         try {
-            String schema_sql = Files.readString(Path.of("src/main/resources/db/" + defaultSchema));
+            try (InputStream in = getClass().getClassLoader().getResourceAsStream("db/" + defaultSchema)) {
+                if (in == null) {
+                    throw new FileNotFoundException("Resource not found: db/" + defaultSchema);
+                }
+                String schema_sql = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+                executeSqlScript(schema_sql);
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Handle error appropriately (maybe show a dialog or exit the program)
+            }
 
-            // Split script into individual statements
-            executeSqlScript(schema_sql);
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
